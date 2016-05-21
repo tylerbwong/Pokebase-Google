@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Pokébase</string>
     <string name="logo_transition">Logo transition</string>
-    <string name="start">Make Your Trainer!</string>
+    <string name="start">Enter</string>
 </resources>
