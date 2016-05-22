@@ -16,14 +16,16 @@
     <string name="openDrawer">Navigation View Closed</string>
 
     <!-- BUTTONS -->
-    <string name="enter">Enter</string>
+    <string name="get_started">Get Started</string>
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="finish">Finish</string>
 
     <!-- LABELS -->
     <string name="count">0/15</string>
-
-
+    <string name="team_description">Create your own teams\n
+        to save for later when it\'s time to battle!</string>
+    <string name="pokedex_description">View your Pokébase and look up\n
+        information on all 721 Pokémon.</string>
 
 </resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorPrimary">
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/starters"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"/>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/charizard"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="160dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/pokedex"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="260dp"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginBottom="150dp"
+        android:layout_alignParentBottom="true"
+        android:maxLines="2"
+        android:text="@string/pokedex_description"/>
+</RelativeLayout>

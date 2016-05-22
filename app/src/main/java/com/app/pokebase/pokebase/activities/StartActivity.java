@@ -1,7 +1,7 @@
 package com.app.pokebase.pokebase.activities;
 
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.fragments.NameEntryFragment;
 import com.app.pokebase.pokebase.utilities.Typefaces;
 
 /**
@@ -45,11 +44,8 @@ public class StartActivity extends AppCompatActivity {
    }
 
    public void nameEntry(View v) {
-      NameEntryFragment nameEntryFragment = new NameEntryFragment();
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-      fragmentTransaction.replace(R.id.start_frame, nameEntryFragment);
-      fragmentTransaction.commit();
+      Intent introIntent = new Intent(this, IntroActivity.class);
+      startActivity(introIntent);
    }
 
    @Override

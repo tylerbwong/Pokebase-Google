@@ -14,11 +14,12 @@
             android:id="@+id/title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
+            android:layout_marginStart="60dp"
             android:layout_marginTop="160dp"
             android:lines="2"
             android:text="@string/setup_title"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="@color/colorAccent"
             android:textSize="40sp"/>
 
@@ -27,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="60dp">
 
             <ProgressBar
                 android:layout_width="80dp"

@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
@@ -24,13 +22,13 @@ public class NameEntryFragment extends Fragment {
    private TextView mTitleLabel;
    private TextInputEditText mNameInput;
    private TextView mNameCount;
-   private Button mNextButton;
    private String mUsername;
-   private boolean mContentFilled = false;
+   private boolean mHasText = false;
 
    Typeface robotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
+   final static String DEFAULT_NAME = "Ash Ketchum";
    final static String MAX_LENGTH = "/15";
 
    @Nullable
@@ -43,23 +41,12 @@ public class NameEntryFragment extends Fragment {
       mTitleLabel = (TextView) v.findViewById(R.id.title_label);
       mNameInput = (TextInputEditText) v.findViewById(R.id.name_input);
       mNameCount = (TextView) v.findViewById(R.id.name_count);
-      mNextButton = (Button) v.findViewById(R.id.next_button);
-
-      mNextButton.setEnabled(false);
 
       if (robotoLight != null) {
          mTitleLabel.setTypeface(robotoLight);
          mNameInput.setTypeface(robotoLight);
          mNameCount.setTypeface(robotoLight);
-         mNextButton.setTypeface(robotoLight);
       }
-
-      mNextButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            genderEntry();
-         }
-      });
 
       mNameInput.addTextChangedListener(new TextWatcher() {
 
@@ -68,12 +55,11 @@ public class NameEntryFragment extends Fragment {
             String charLeft = s.length() + MAX_LENGTH;
 
             if (s.toString().trim().length() == 0) {
-               mContentFilled = false;
+               mHasText = false;
             }
             else {
-               mContentFilled = true;
+               mHasText = true;
             }
-            checkFields();
             mNameCount.setText(charLeft);
          }
 
@@ -90,25 +76,13 @@ public class NameEntryFragment extends Fragment {
       return v;
    }
 
-   private void checkFields() {
-      if (mContentFilled) {
-         mNextButton.setEnabled(true);
+   public String getUsername() {
+      if (mHasText) {
+         mUsername = mNameInput.getText().toString();
       }
       else {
-         mNextButton.setEnabled(false);
+         mUsername = DEFAULT_NAME;
       }
-   }
-
-   private void genderEntry() {
-      mUsername = mNameInput.getText().toString();
-
-      Bundle fragmentBundle = new Bundle();
-      fragmentBundle.putString("username", mUsername);
-      GenderEntryFragment genderEntryFragment = new GenderEntryFragment();
-      genderEntryFragment.setArguments(fragmentBundle);
-      FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-      fragmentTransaction.replace(R.id.start_frame, genderEntryFragment);
-      fragmentTransaction.commit();
+      return mUsername;
    }
 }
