@@ -1,5 +1,29 @@
 <resources>
+    <!-- NAMES -->
     <string name="app_name">Pokébase</string>
+    <string name="enter_name">Enter your name</string>
+    <string name="pokebase">Pokébase</string>
+    <string name="teams">My Teams</string>
+
+    <!-- TITLES -->
+    <string name="name_title">First, what is\nyour name?</string>
+    <string name="gender_title">Are you a Boy?\nOr are you a Girl?</string>
+    <string name="setup_title">Setting up\nyour Pokébase&#8230;</string>
+
+    <!-- VALUES -->
     <string name="logo_transition">Logo transition</string>
-    <string name="start">Enter</string>
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
+
+    <!-- BUTTONS -->
+    <string name="enter">Enter</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="finish">Finish</string>
+
+    <!-- LABELS -->
+    <string name="count">0/15</string>
+
+
+
 </resources>

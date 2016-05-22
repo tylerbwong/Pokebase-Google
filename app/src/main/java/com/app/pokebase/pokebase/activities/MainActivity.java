@@ -1,43 +1,109 @@
 package com.app.pokebase.pokebase.activities;
 
-import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.utilities.Typefaces;
 
 /**
  * @author Tyler Wong
  */
 public class MainActivity extends AppCompatActivity {
-   private TextView mTitleLabel;
-   private Button mEnterButton;
-
-   Typeface robotoLight;
-
-   final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
+   private NavigationView mNavigationView;
+   private DrawerLayout mDrawerLayout;
+   private Toolbar mToolbar;
+   private ImageView mProfilePicture;
+   private TextView mUsernameView;
+   private String mUsername;
+   private boolean mIsBoy;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      robotoLight = Typefaces.get(this, ROBOTO_PATH);
-
       setContentView(R.layout.activity_main);
 
-      mTitleLabel = (TextView) findViewById(R.id.title_label);
-      mEnterButton = (Button) findViewById(R.id.enter_button);
+      mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+      final View headerView = mNavigationView.getHeaderView(0);
+      mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
-         mEnterButton.setTypeface(robotoLight);
+      Intent mainIntent = getIntent();
+      mUsername = mainIntent.getStringExtra("username");
+      mIsBoy = mainIntent.getBooleanExtra("is_boy", false);
+
+      mProfilePicture = (ImageView) headerView.findViewById(R.id.profile_image);
+      mUsernameView = (TextView) headerView.findViewById(R.id.username);
+
+      mUsernameView.setText(mUsername);
+
+      if (mIsBoy) {
+         mProfilePicture.setImageDrawable(getDrawable(R.drawable.boy));
+      }
+      else {
+         mProfilePicture.setImageDrawable(getDrawable(R.drawable.girl));
       }
 
-      boolean logoTransition = getIntent().getBooleanExtra("logo_transition", false);
-      if (logoTransition) {
-         overridePendingTransition(R.anim.slow_transition, R.anim.slow_transition);
+      mToolbar = (Toolbar) findViewById(R.id.toolbar);
+      setSupportActionBar(mToolbar);
+
+      mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+         @Override
+         public boolean onNavigationItemSelected(MenuItem menuItem) {
+            mDrawerLayout.closeDrawers();
+
+            switch (menuItem.getItemId()) {
+               case R.id.pokebase:
+                  return true;
+               case R.id.teams:
+                  return true;
+               default:
+                  return false;
+            }
+         }
+      });
+
+      ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+            this, mDrawerLayout, mToolbar, R.string.openDrawer, R.string.closeDrawer) {
+
+         @Override
+         public void onDrawerClosed(View drawerView) {
+            super.onDrawerClosed(drawerView);
+            hideKeyboard();
+         }
+
+         @Override
+         public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
+            hideKeyboard();
+         }
+      };
+
+      mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+      actionBarDrawerToggle.syncState();
+   }
+
+   private void hideKeyboard() {
+      View view = getCurrentFocus();
+
+      if (view != null) {
+         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
       }
+   }
+
+   @Override
+   public void onBackPressed() {
+
    }
 }

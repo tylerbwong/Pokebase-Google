@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
       new Handler().postDelayed(new Runnable() {
          @Override
          public void run() {
-            Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent mainIntent = new Intent(SplashActivity.this, StartActivity.class);
             mainIntent.putExtra("logo_transition", true);
             LinearLayout logo = (LinearLayout) findViewById(R.id.logo);
             ActivityOptionsCompat options = ActivityOptionsCompat.
