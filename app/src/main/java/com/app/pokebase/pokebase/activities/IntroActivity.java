@@ -16,8 +16,6 @@ public class IntroActivity extends AppIntro {
    private IntroTeamFragment mIntroTeamFragment;
    private NameEntryFragment mNameEntryFragment;
    private GenderEntryFragment mGenderEntryFragment;
-   private String mUsername;
-   private boolean mIsBoy;
 
    @Override
    public void init(Bundle savedInstanceState) {
