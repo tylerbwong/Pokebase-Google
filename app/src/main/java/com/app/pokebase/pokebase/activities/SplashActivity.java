@@ -38,28 +38,28 @@ public class SplashActivity extends AppCompatActivity {
          mTitleLabel.setTypeface(robotoLight);
       }
 
-      Thread preferenceThread = new Thread(new Runnable() {
-         @Override
-         public void run() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-                  getBaseContext());
-
-            boolean isFirstStart = preferences.getBoolean("firstStart", true);
-
-            if (!isFirstStart) {
-               Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-               startActivity(mainIntent);
-            }
-            else {
-               SharedPreferences.Editor editor = preferences.edit();
-               editor.putBoolean("firstStart", false);
-               editor.apply();
-               Intent startIntent = new Intent(SplashActivity.this, StartActivity.class);
-               startActivity(startIntent);
-            }
-         }
-      });
-      preferenceThread.start();
+//      Thread preferenceThread = new Thread(new Runnable() {
+//         @Override
+//         public void run() {
+//            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+//                  getBaseContext());
+//
+//            boolean isFirstStart = preferences.getBoolean("firstStart", true);
+//
+//            if (!isFirstStart) {
+//               Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+//               startActivity(mainIntent);
+//            }
+//            else {
+//               SharedPreferences.Editor editor = preferences.edit();
+//               editor.putBoolean("firstStart", false);
+//               editor.apply();
+//               Intent startIntent = new Intent(SplashActivity.this, StartActivity.class);
+//               startActivity(startIntent);
+//            }
+//         }
+//      });
+//      preferenceThread.start();
    }
 
    @Override

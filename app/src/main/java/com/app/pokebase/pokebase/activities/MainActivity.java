@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
+import com.app.pokebase.pokebase.fragments.TeamsFragment;
 
 /**
  * @author Tyler Wong
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
    private TextView mUsernameView;
    private String mUsername;
    private boolean mIsBoy;
+
+   private FragmentTransaction fragmentTransaction;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
 
+      mNavigationView.getMenu().getItem(0).setChecked(true);
+      TeamsFragment eventsFragment = new TeamsFragment();
+      fragmentTransaction = getSupportFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.frame, eventsFragment);
+      fragmentTransaction.commit();
+
       mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
          @Override
@@ -63,9 +73,13 @@ public class MainActivity extends AppCompatActivity {
             mDrawerLayout.closeDrawers();
 
             switch (menuItem.getItemId()) {
-               case R.id.pokebase:
-                  return true;
                case R.id.teams:
+                  TeamsFragment eventsFragment = new TeamsFragment();
+                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                  fragmentTransaction.replace(R.id.frame, eventsFragment);
+                  fragmentTransaction.commit();
+                  return true;
+               case R.id.pokebase:
                   return true;
                default:
                   return false;

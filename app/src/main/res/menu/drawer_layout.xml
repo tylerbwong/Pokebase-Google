@@ -3,13 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/pokebase"
-            android:checked="false"
-            android:title="@string/pokebase"/>
-
-        <item
             android:id="@+id/teams"
             android:checked="false"
             android:title="@string/teams"/>
+
+        <item
+            android:id="@+id/pokebase"
+            android:checked="false"
+            android:title="@string/pokebase"/>
     </group>
 </menu>
