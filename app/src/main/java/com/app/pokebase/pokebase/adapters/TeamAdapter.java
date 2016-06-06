@@ -7,14 +7,24 @@ import android.view.ViewGroup;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
+import com.app.pokebase.pokebase.utilities.Team;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * @author Tyler Wong
  */
 public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
-   public TeamAdapter() {
+   private ArrayList<Team> mTeams;
 
+   public TeamAdapter(ArrayList<Team> teams) {
+      this.mTeams = teams;
+   }
+
+   public ArrayList<Team> getTeams() {
+      return mTeams;
    }
 
    @Override

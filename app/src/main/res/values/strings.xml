@@ -4,11 +4,13 @@
     <string name="enter_name">Enter your name</string>
     <string name="pokebase">Pokébase</string>
     <string name="teams">My Teams</string>
+    <string name="new_team">New Team</string>
 
     <!-- TITLES -->
     <string name="name_title">First, what is\nyour name?</string>
     <string name="gender_title">Are you a Boy?\nOr are you a Girl?</string>
     <string name="setup_title">Setting up\nyour Pokébase&#8230;</string>
+    <string name="go_back">Go Back</string>
 
     <!-- VALUES -->
     <string name="logo_transition">Logo transition</string>
@@ -20,6 +22,8 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="finish">Finish</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- LABELS -->
     <string name="count">0/15</string>
@@ -27,5 +31,7 @@
         to save for later when it\'s time to battle!</string>
     <string name="pokedex_description">View your Pokébase and look up\n
         information on all 721 Pokémon.</string>
+    <string name="make_team">Make your first team!</string>
+    <string name="back_prompt">Are you sure you want to go back?\nAll changes will be lost.</string>
 
 </resources>

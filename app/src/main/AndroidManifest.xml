@@ -48,7 +48,7 @@
         <activity android:name=".activities.NewTeamActivity"
                   android:configChanges="orientation"
                   android:screenOrientation="portrait"
-                  android:label="@string/app_name"
+                  android:label="@string/teams"
                   android:theme="@style/MainTheme">
         </activity>
     </application>
