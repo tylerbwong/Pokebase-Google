@@ -39,12 +39,13 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
    @Override
    public void onBindViewHolder(final TeamCardViewHolder holder, int position) {
-
+      Team curTeam = mTeams.get(position);
+      holder.mName.setText(curTeam.getName());
    }
 
    @Override
    public int getItemCount() {
-      return 0;
+      return mTeams.size();
    }
 
    @Override

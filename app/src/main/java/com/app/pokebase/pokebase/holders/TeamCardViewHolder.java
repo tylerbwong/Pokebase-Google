@@ -21,8 +21,8 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
       super(itemView);
 
       mPicture = (ImageView) itemView.findViewById(R.id.photo);
-      mName = (TextView) itemView.findViewById(R.id.event_title);
+      mName = (TextView) itemView.findViewById(R.id.title_label);
       mMove = (TextView) itemView.findViewById(R.id.description);
-      mLevel = (TextView) itemView.findViewById(R.id.street);
+      mLevel = (TextView) itemView.findViewById(R.id.level);
    }
 }
