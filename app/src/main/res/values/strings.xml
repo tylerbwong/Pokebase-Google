@@ -33,5 +33,14 @@
         information on all 721 Pokémon.</string>
     <string name="make_team">Make your first team!</string>
     <string name="back_prompt">Are you sure you want to go back?\nAll changes will be lost.</string>
+    <string name="type">Type</string>
+    <string name="species">Species</string>
+    <string name="region">Region</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="baseExp">Base EXP</string>
+    <string name="normal">Normal</string>
+    <string name="evolutions">Evolutions</string>
+    <string name="moveset">Move Set</string>
 
 </resources>

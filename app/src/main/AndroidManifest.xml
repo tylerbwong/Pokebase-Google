@@ -51,6 +51,10 @@
                   android:label="@string/teams"
                   android:theme="@style/MainTheme">
         </activity>
+        <activity android:name=".activities.ProfileActivity"
+            android:theme="@style/MainTheme"/>
+        <activity android:name=".activities.EvolutionsActivity"
+            android:theme="@style/MainTheme"/>
     </application>
 
 </manifest>
