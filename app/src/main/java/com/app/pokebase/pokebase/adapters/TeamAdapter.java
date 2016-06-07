@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
-import com.app.pokebase.pokebase.utilities.Team;
+import com.app.pokebase.pokebase.components.Team;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +39,8 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
    @Override
    public void onBindViewHolder(final TeamCardViewHolder holder, int position) {
       Team curTeam = mTeams.get(position);
-      holder.mName.setText(curTeam.getName());
+      holder.mTitleLabel.setText(curTeam.getName());
+      //holder.mPokemonOne.setImageDrawable(c);
    }
 
    @Override

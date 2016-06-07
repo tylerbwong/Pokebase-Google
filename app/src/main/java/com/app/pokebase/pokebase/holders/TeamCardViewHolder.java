@@ -11,18 +11,23 @@ import com.app.pokebase.pokebase.R;
  * @author Tyler Wong
  */
 public class TeamCardViewHolder extends RecyclerView.ViewHolder {
-   public TextView mName;
-   public ImageView mType;
-   public TextView mLevel;
-   public TextView mMove;
-   public ImageView mPicture;
+   public TextView mTitleLabel;
+   public ImageView mPokemonOne;
+   public ImageView mPokemonTwo;
+   public ImageView mPokemonThree;
+   public ImageView mPokemonFour;
+   public ImageView mPokemonFive;
+   public ImageView mPokemonSix;
 
    public TeamCardViewHolder(View itemView) {
       super(itemView);
 
-      mPicture = (ImageView) itemView.findViewById(R.id.photo);
-      mName = (TextView) itemView.findViewById(R.id.title_label);
-      mMove = (TextView) itemView.findViewById(R.id.description);
-      mLevel = (TextView) itemView.findViewById(R.id.level);
+      mTitleLabel = (TextView) itemView.findViewById(R.id.title_label);
+      mPokemonOne = (ImageView) itemView.findViewById(R.id.pokemon_1);
+      mPokemonTwo = (ImageView) itemView.findViewById(R.id.pokemon_2);
+      mPokemonThree = (ImageView) itemView.findViewById(R.id.pokemon_3);
+      mPokemonFour = (ImageView) itemView.findViewById(R.id.pokemon_4);
+      mPokemonFive = (ImageView) itemView.findViewById(R.id.pokemon_5);
+      mPokemonSix = (ImageView) itemView.findViewById(R.id.pokemon_6);
    }
 }

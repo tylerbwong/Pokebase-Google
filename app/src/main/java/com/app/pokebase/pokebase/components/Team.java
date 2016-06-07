@@ -1,4 +1,4 @@
-package com.app.pokebase.pokebase.utilities;
+package com.app.pokebase.pokebase.components;
 
 import java.util.ArrayList;
 
@@ -27,5 +27,9 @@ public class Team {
 
    public void removePokemon(int index) {
       mTeam.remove(index);
+   }
+
+   public ArrayList<Pokemon> getTeam() {
+      return mTeam;
    }
 }

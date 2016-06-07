@@ -9,19 +9,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.NewTeamActivity;
 import com.app.pokebase.pokebase.adapters.TeamAdapter;
-import com.app.pokebase.pokebase.utilities.Pokemon;
-import com.app.pokebase.pokebase.utilities.Team;
+import com.app.pokebase.pokebase.components.Pokemon;
+import com.app.pokebase.pokebase.components.Team;
 import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.ArrayList;
