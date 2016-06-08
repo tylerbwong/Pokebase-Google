@@ -86,6 +86,9 @@ public class PokemonEditorActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.submit_action:
+                //UPDATE database
+                break;
             default:
                 break;
         }
