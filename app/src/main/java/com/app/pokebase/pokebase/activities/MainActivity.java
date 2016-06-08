@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
+import com.app.pokebase.pokebase.fragments.PokebaseFragment;
 import com.app.pokebase.pokebase.fragments.TeamsFragment;
 
 /**
@@ -79,8 +80,14 @@ public class MainActivity extends AppCompatActivity {
                   fragmentTransaction.replace(R.id.frame, eventsFragment);
                   fragmentTransaction.commit();
                   return true;
+
                case R.id.pokebase:
+                  PokebaseFragment pokeFragment = new PokebaseFragment();
+                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                  fragmentTransaction.replace(R.id.frame, pokeFragment);
+                  fragmentTransaction.commit();
                   return true;
+
                default:
                   return false;
             }
