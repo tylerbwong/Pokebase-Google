@@ -55,6 +55,8 @@
             android:theme="@style/MainTheme"/>
         <activity android:name=".activities.EvolutionsActivity"
             android:theme="@style/MainTheme"/>
+        <activity android:name=".activities.PokemonEditorActivity"
+            android:theme="@style/PokemonEditorTheme"/>
     </application>
 
 </manifest>

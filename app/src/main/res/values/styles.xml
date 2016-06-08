@@ -38,6 +38,20 @@
         <item name="android:textColorHint">@color/colorAccent</item>
     </style>
 
+    <!-- Pokemon Editor Theme -->
+    <style name="PokemonEditorTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+    </style>
+
     <style name="ProfileLeftText">
         <item name="android:textSize">18dp</item>
         <item name="android:textAlignment">textEnd</item>

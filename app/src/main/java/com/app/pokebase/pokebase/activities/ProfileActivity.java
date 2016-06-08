@@ -1,20 +1,18 @@
 package com.app.pokebase.pokebase.activities;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
+import com.app.pokebase.pokebase.adapters.TextViewAdapter;
 
 /**
  * Created by brittanyberlanga on 6/4/16.
@@ -73,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         moves[7] = "eevee";
         moves[8] = "shaymin";
         moves[9] = "blah blah";
-        mMovesList.setAdapter(new TextViewAdapter(moves));
+        mMovesList.setAdapter(new TextViewAdapter(this, moves));
         setHeightViewText(3);
         setWeightViewText(65);
 
@@ -122,77 +120,5 @@ public class ProfileActivity extends AppCompatActivity {
     {
         Intent evolutionsIntent = new Intent(this, EvolutionsActivity.class);
         startActivity(evolutionsIntent);
-    }
-
-    public final class TextViewAdapter implements ListAdapter {
-        private String[] items;
-        public TextViewAdapter(String[] items)
-        {
-            super();
-            this.items = items;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return false;
-        }
-
-        @Override
-        public boolean areAllItemsEnabled() {
-            return false;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return items.length == 0;
-        }
-
-        @Override
-        public void registerDataSetObserver(DataSetObserver observer) {}
-
-        @Override
-        public void unregisterDataSetObserver(DataSetObserver observer) {}
-
-        @Override
-        public int getCount() {
-            return items.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return items[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView = new TextView(ProfileActivity.this);
-            textView.setTextSize(16);
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            textView.setLayoutParams(lp);
-            textView.setText(items[position]);
-            return textView;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return 1;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 1;
-        }
     }
 }

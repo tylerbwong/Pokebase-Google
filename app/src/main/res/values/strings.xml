@@ -42,5 +42,6 @@
     <string name="normal">Normal</string>
     <string name="evolutions">Evolutions</string>
     <string name="moveset">Move Set</string>
-
+    <string name="nickname">Nickname</string>
+    <string name="nickname_hint">Enter your pokémon\'s nickname</string>
 </resources>
