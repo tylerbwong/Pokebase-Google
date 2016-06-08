@@ -7,10 +7,13 @@ import java.util.ArrayList;
  */
 public class Team {
    private String mName;
-   private ArrayList<Pokemon> mTeam;
+   private String mDescription;
+   private ArrayList<PokemonTeamMember> mTeam;
 
-   public Team(String name, ArrayList<Pokemon> team) {
+   public Team(String name, String description, ArrayList<PokemonTeamMember> team) {
       this.mName = name;
+      this.mDescription = description;
+      this.mTeam = team;
    }
 
    public void setName(String name) {
@@ -21,7 +24,7 @@ public class Team {
       return mName;
    }
 
-   public void addPokemon(Pokemon pokemon) {
+   public void addPokemon(PokemonTeamMember pokemon) {
       mTeam.add(pokemon);
    }
 
@@ -29,7 +32,7 @@ public class Team {
       mTeam.remove(index);
    }
 
-   public ArrayList<Pokemon> getTeam() {
+   public ArrayList<PokemonTeamMember> getTeam() {
       return mTeam;
    }
 }

@@ -3,5 +3,5 @@ package com.app.pokebase.pokebase.components;
 /**
  * @author Tyler Wong
  */
-public class Pokemon {
+public class PokemonTeamMember {
 }

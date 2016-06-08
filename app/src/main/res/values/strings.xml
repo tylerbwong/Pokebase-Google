@@ -43,5 +43,10 @@
     <string name="evolutions">Evolutions</string>
     <string name="moveset">Move Set</string>
     <string name="nickname">Nickname</string>
-    <string name="nickname_hint">Enter your pokémon\'s nickname</string>
+    <string name="nickname_hint">Enter your Pokémon\'s nickname</string>
+    <string name="team_name">Team Name</string>
+    <string name="description">Description</string>
+    <string name="add_pokemon">Add Pokémon</string>
+    <string name="no_pokemon">No Pokémon Added Yet!</string>
+    <string name="lvl">Lvl. 100</string>
 </resources>

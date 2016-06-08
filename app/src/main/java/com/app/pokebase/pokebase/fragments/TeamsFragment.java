@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.activities.NewTeamActivity;
+import com.app.pokebase.pokebase.activities.TeamViewActivity;
 import com.app.pokebase.pokebase.adapters.TeamAdapter;
-import com.app.pokebase.pokebase.components.Pokemon;
+import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.components.Team;
 import com.github.fabtransitionactivity.SheetLayout;
 
@@ -65,11 +65,11 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
 
       mTeams = new ArrayList<>();
 
-      mTeams.add(new Team("test", new ArrayList<Pokemon>()));
-      mTeams.add(new Team("test", new ArrayList<Pokemon>()));
-      mTeams.add(new Team("test", new ArrayList<Pokemon>()));
-      mTeams.add(new Team("test", new ArrayList<Pokemon>()));
-      mTeams.add(new Team("test", new ArrayList<Pokemon>()));
+      mTeams.add(new Team("test", "description", new ArrayList<PokemonTeamMember>()));
+      mTeams.add(new Team("test", "description", new ArrayList<PokemonTeamMember>()));
+      mTeams.add(new Team("test", "description", new ArrayList<PokemonTeamMember>()));
+      mTeams.add(new Team("test", "description", new ArrayList<PokemonTeamMember>()));
+      mTeams.add(new Team("test", "description", new ArrayList<PokemonTeamMember>()));
 
       LinearLayoutManager llm = new LinearLayoutManager(getContext());
       llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -95,7 +95,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
 
    @Override
    public void onFabAnimationEnd() {
-      Intent intent = new Intent(getContext(), NewTeamActivity.class);
+      Intent intent = new Intent(getContext(), TeamViewActivity.class);
       startActivityForResult(intent, REQUEST_CODE);
    }
 
