@@ -13,11 +13,15 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.PokemonRecyclerViewAdapter;
 import com.app.pokebase.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.pokebase.pokebase.components.PokemonListItem;
+import com.app.pokebase.pokebase.interfaces.ApiCallback;
+import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
+
+import java.util.List;
 
 /**
  * @author Tyler Wong
  */
-public class PokebaseFragment extends Fragment {
+public class PokebaseFragment extends Fragment implements ApiCallback{
     private Spinner mTypeSpinner;
     private Spinner mRegionSpinner;
     private RecyclerView mPokemonList;
@@ -60,6 +64,17 @@ public class PokebaseFragment extends Fragment {
         PokemonListItem[] items = new PokemonListItem[2];
         items[0] = new PokemonListItem(25, "Pikachu");
         items[1] = new PokemonListItem(1, "Bulbasaur");
+        mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(), items));
+    }
+
+    @Override
+    public void onApiCallback(QueryResult result) {
+        List<Integer> ids = result.getIntInfo();
+        List<String> names = result.getStringInfo();
+        PokemonListItem[] items = new PokemonListItem[ids.size()];
+        for (int i = 0; i < ids.size(); i++) {
+            items[i] = new PokemonListItem(ids.get(i), names.get(i));
+        }
         mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(), items));
     }
 }

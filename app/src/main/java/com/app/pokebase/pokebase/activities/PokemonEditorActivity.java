@@ -103,6 +103,7 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
 
     @Override
     public void onApiCallback(QueryResult result) {
-//        String[] ids = result.getInfo();
+//        List<Integer> ids = result.getIntInfo();
+//        List<String> names = result.getStringInfo();
     }
 }

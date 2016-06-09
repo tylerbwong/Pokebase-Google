@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Pair;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,11 +20,14 @@ import android.widget.TextView;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.fragments.PokebaseFragment;
 import com.app.pokebase.pokebase.fragments.TeamsFragment;
+import com.app.pokebase.pokebase.interfaces.ApiCallback;
+import com.app.pokebase.pokebase.querytasks.NewQueryTask;
+import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 
 /**
  * @author Tyler Wong
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ApiCallback{
    private NavigationView mNavigationView;
    private DrawerLayout mDrawerLayout;
    private Toolbar mToolbar;
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
    private TextView mUsernameView;
    private String mUsername;
    private boolean mIsBoy;
+   private Fragment mCurrentFragment;
 
    private FragmentTransaction fragmentTransaction;
 
@@ -83,9 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
                case R.id.pokebase:
                   PokebaseFragment pokeFragment = new PokebaseFragment();
+                  mCurrentFragment = pokeFragment;
                   fragmentTransaction = getSupportFragmentManager().beginTransaction();
                   fragmentTransaction.replace(R.id.frame, pokeFragment);
                   fragmentTransaction.commit();
+                  String[] something = new String[1];
+                  something[0] = "hello";
+                  new NewQueryTask().execute(new Pair<Context, String[]>(MainActivity.this, something));
                   return true;
 
                default:
@@ -126,5 +136,10 @@ public class MainActivity extends AppCompatActivity {
    @Override
    public void onBackPressed() {
 
+   }
+
+   @Override
+   public void onApiCallback(QueryResult result) {
+      ((ApiCallback) mCurrentFragment).onApiCallback(result);
    }
 }

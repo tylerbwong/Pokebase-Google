@@ -34,7 +34,7 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "queryByType")
-    public QueryResult queryByType(QueryInfo info) {
+    public QueryResult queryByType(@Named("info") String[] info) {
         //do da query
         int[] ids = new int[3];
         ids[0] = 1;
@@ -45,7 +45,6 @@ public class MyEndpoint {
         names[1] = "Pikachu";
         names[2] = "Eevee";
         return new PokemonListResult(ids, names);
-//        return null;
     }
 
 }
