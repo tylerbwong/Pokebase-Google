@@ -1,31 +1,13 @@
 # Pokebase
 
-TODO: Write a project description
+This Android application uses Google Cloud App Engine with Google Cloud SQL to store and query 
+information about all 721 Pokémon. You are able to view information about each Pokémon as well as
+create teams with Pokémon of various levels and movesets.
 
 ## Installation
 
-TODO: Describe the installation process
+Requires Android 5.1 (Lollipop) or higher. Simply install the APK.
 
 ## Usage
 
-TODO: Write usage instructions
-
-## Contributing
-
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
-
-## History
-
-TODO: Write history
-
-## Credits
-
-TODO: Write credits
-
-## License
-
-TODO: Write license
+Open the application on your phone and create an account.
