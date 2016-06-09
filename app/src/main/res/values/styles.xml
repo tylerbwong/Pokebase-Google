@@ -48,7 +48,7 @@
         <item name="windowNoTitle">true</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
         <item name="android:textColorHint">@color/colorPrimary</item>
     </style>
 

@@ -12,7 +12,7 @@ import android.widget.TextView;
  */
 public class TextViewSpinnerAdapter implements SpinnerAdapter {
     private static final int TEXT_SIZE = 16;
-    private static final int PADDING = 18;
+    private static final int PADDING = 20;
     private static final int PADDING_LEFT = 30;
     private Context mContext;
     private String[] mItems;
