@@ -33,4 +33,19 @@ public class MyEndpoint {
         return response;
     }
 
+    @ApiMethod(name = "queryByType")
+    public QueryResult queryByType(QueryInfo info) {
+        //do da query
+        int[] ids = new int[3];
+        ids[0] = 1;
+        ids[1] = 25;
+        ids[2] = 133;
+        String[] names = new String[3];
+        names[0] = "Bulbasaur";
+        names[1] = "Pikachu";
+        names[2] = "Eevee";
+        return new PokemonListResult(ids, names);
+//        return null;
+    }
+
 }

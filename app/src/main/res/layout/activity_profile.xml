@@ -76,13 +76,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="@string/species" />
-
-                <TextView
-                    style="@style/ProfileLeftText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:text="@string/region" />
 
                 <TextView
@@ -148,14 +141,6 @@
                         android:textSize="12sp"
                         android:visibility="gone" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/species"
-                    style="@style/ProfileRightText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:text="Evolution" />
 
                 <TextView
                     android:id="@+id/region"

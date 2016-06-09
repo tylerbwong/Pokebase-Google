@@ -42,4 +42,5 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
     compile project(path: ':backend', configuration: 'android-endpoints')
+    compile project(path: ':backend')
 }

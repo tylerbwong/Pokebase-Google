@@ -31,7 +31,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView mNameView;
     private TextView mTypeOneView;
     private TextView mTypeTwoView;
-    private TextView mSpeciesView;
     private TextView mRegionView;
     private TextView mHeightView;
     private TextView mWeightView;
@@ -54,7 +53,6 @@ public class ProfileActivity extends AppCompatActivity {
         mNameView = (TextView) findViewById(R.id.name);
         mTypeOneView = (TextView) findViewById(R.id.type_one);
         mTypeTwoView = (TextView) findViewById(R.id.type_two);
-        mSpeciesView = (TextView) findViewById(R.id.species);
         mRegionView = (TextView) findViewById(R.id.region);
         mHeightView = (TextView) findViewById(R.id.height);
         mWeightView = (TextView) findViewById(R.id.weight);
