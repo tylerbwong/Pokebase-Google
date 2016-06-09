@@ -18,6 +18,7 @@ import com.app.pokebase.pokebase.adapters.TextViewAdapter;
  * Created by brittanyberlanga on 6/4/16.
  */
 public class ProfileActivity extends AppCompatActivity {
+    public static final String POKEMON_ID_KEY = "pokemon_id";
     private static final double FT_PER_DM = 0.32808399;
     private static final double LB_PER_HG = 0.22046226218;
     private static final int KG_PER_HG = 10;
@@ -40,12 +41,16 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        int pokemonId = extras.getInt(POKEMON_ID_KEY);
         setContentView(R.layout.activity_profile);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mProfileImg = (ImageView) findViewById(R.id.profile_image);
         mProfileImg.setClipToOutline(true);
         mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
         mIdView = (TextView) findViewById(R.id.id);
+        mIdView.setText(String.valueOf(pokemonId));
         mNameView = (TextView) findViewById(R.id.name);
         mTypeOneView = (TextView) findViewById(R.id.type_one);
         mTypeTwoView = (TextView) findViewById(R.id.type_two);
