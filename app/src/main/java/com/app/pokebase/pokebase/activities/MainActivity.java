@@ -54,9 +54,10 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
       mProfilePicture = (ImageView) headerView.findViewById(R.id.profile_image);
       mUsernameView = (TextView) headerView.findViewById(R.id.username);
 
-      mUsernameView.setText(mUsername);
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      mUsernameView.setText(pref.getString("username",""));
 
-      if (mIsBoy) {
+      if (pref.getString("gender", "M").equals("M")) {
          mProfilePicture.setImageDrawable(getDrawable(R.drawable.boy));
       }
       else {

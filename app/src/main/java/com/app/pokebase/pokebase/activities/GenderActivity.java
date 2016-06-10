@@ -105,6 +105,8 @@ public class GenderActivity extends AppCompatActivity implements ApiCallback {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
       ed.putBoolean("loggedIn", true);
+      ed.putString("username", mUsername);
+      ed.putString("gender", newUser[2]);
       ed.apply();
       new QueryTask().execute(new Pair<Context, String[]>(this, newUser));
    }

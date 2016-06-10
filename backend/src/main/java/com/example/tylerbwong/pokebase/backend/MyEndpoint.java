@@ -352,8 +352,7 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "newTeam")
-    public QueryResult newTeam(@Named("id") String id, @Named("name") String name,
-                               @Named("description") String description) {
+    public QueryResult newTeam(@Named("name") String name, @Named("description") String description) {
         instantiateDriver();
 
         try {

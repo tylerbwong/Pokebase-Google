@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
          SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
          SharedPreferences.Editor ed = pref.edit();
          ed.putBoolean("loggedIn", true);
+         ed.putString("username", mNameInput.getText().toString());
          ed.apply();
          Intent loadingIntent = new Intent(this, LoadingActivity.class);
          loadingIntent.putExtra("username", mNameInput.getText().toString());
