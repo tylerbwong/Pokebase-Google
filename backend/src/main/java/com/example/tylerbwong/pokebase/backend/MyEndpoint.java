@@ -36,7 +36,7 @@ public class MyEndpoint {
     private final static String TYPE_QUERY =
             "SELECT P.id, P.name " +
             "FROM Pokemon P " +
-            "JOIN PokemonTypes T ON P.id = T.pokemonId" +
+            "JOIN PokemonTypes T ON P.id = T.pokemonId " +
             "JOIN Types Y ON Y.id = T.typeId " +
             "WHERE Y.name = ?";
 
