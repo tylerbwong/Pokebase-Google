@@ -33,6 +33,7 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
     public static final String UPDATE_POKEMON = "update_pokemon";
     public static final String DELETE_POKEMON = "delete_pokemon";
     public static final String DELETE_TEAM = "delete_team";
+    public static final String ALL_TYPES_REGIONS = "all_types_and_regions";
 
     private static MyApi myApiService = null;
     private Context context;
@@ -56,9 +57,13 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
         try {
             switch (command) {
                 case ALL_POKEMON:
+                    return myApiService.queryAll().execute();
                 case POKEMON_BY_TYPE:
+                    return myApiService.queryByType(queryList.get(1)).execute();
                 case POKEMON_BY_REGION:
+                    return myApiService.queryByRegion(queryList.get(1)).execute();
                 case POKEMON_BY_TYPE_AND_REGION:
+                    return myApiService.queryByTypeAndRegion(queryList.get(1), queryList.get(2)).execute();
                 case SELECTED_POKEMON:
                 case SELECTED_POKEMON_EVOLUTIONS:
                 case POKEMON_BY_NAME:
@@ -70,8 +75,12 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
                 case UPDATE_POKEMON:
                 case DELETE_POKEMON:
                 case DELETE_TEAM:
+                    return null;
+                case ALL_TYPES_REGIONS:
+                    return myApiService.queryAllTypesRegions().execute();
+                default:
+                    return null;
             }
-            return myApiService.queryByType(queryList.get(0)).execute();
         }
         catch (IOException e) {
             //return e.getMessage();

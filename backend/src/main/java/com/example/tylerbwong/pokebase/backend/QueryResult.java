@@ -21,6 +21,7 @@ public abstract class QueryResult {
     public static final String UPDATE_POKEMON = "update_pokemon";
     public static final String DELETE_POKEMON = "delete_pokemon";
     public static final String DELETE_TEAM = "delete_team";
+    public static final String ALL_TYPES_REGIONS = "all_types_and_regions";
     public List<String> getStringInfo() {
         return null;
     }

@@ -33,12 +33,61 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
     private String url;
+    private final static String ALL =
+            "SELECT P.id, P.name " +
+                    "FROM Pokemon P";
+    private final static String ALL_TYPES =
+            "SELECT T.name FROM Types T";
+    private final static String ALL_REGIONS =
+            "SELECT R.name FROM Regions R";
     private final static String TYPE_QUERY =
             "SELECT P.id, P.name " +
             "FROM Pokemon P " +
             "JOIN PokemonTypes T ON P.id = T.pokemonId " +
             "JOIN Types Y ON Y.id = T.typeId " +
             "WHERE Y.name = ?";
+    private final static String REGION_QUERY =
+                            "SELECT P.id, P.name " +
+                            "FROM Pokemon P " +
+                            "JOIN Regions R ON R.id = P.region " +
+                            "WHERE R.name = ?";
+    private final static String TYPE_REGION_QUERY =
+            "SELECT P.id, P.name " +
+                    "FROM Pokemon P " +
+                    "JOIN PokemonTypes T ON P.id = T.pokemonId " +
+                    "JOIN Types Y ON Y.id = T.typeId " +
+                    "JOIN Regions R ON R.id = P.region " +
+                    "WHERE Y.name = ? " +
+                    "AND R.name = ?";
+
+
+    @ApiMethod(name = "queryAllTypesRegions")
+    public QueryResult queryAllTypesRegions() {
+        instantiateDriver();
+
+        List<String> types = new ArrayList<>();
+        List<String> regions = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(ALL_TYPES);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                types.add(resultSet.getString("name"));
+            }
+            preparedStatement = connection.prepareStatement(ALL_REGIONS);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                regions.add(resultSet.getString("name"));
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            types.add(e.getMessage());
+            regions.add(e.getMessage());
+        }
+
+        return new TypeRegionResult(types, regions);
+    }
 
     @ApiMethod(name = "queryByType")
     public QueryResult queryByType(@Named("type") String type) {
@@ -49,7 +98,7 @@ public class MyEndpoint {
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement preparedStatement = connection.prepareStatement(TYPE_QUERY);
-            preparedStatement.setString(1, "Water");
+            preparedStatement.setString(1, type);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 ids.add(resultSet.getInt("id"));
@@ -67,26 +116,52 @@ public class MyEndpoint {
 
     @ApiMethod(name = "queryByRegion")
     public QueryResult queryByRegion(@Named("region") String region) {
-        //SELECT P.id, P.name
-        //FROM Pokemon P
-        //JOIN Regions R ON R.id = P.region
-        //WHERE R.name = (?)
+        instantiateDriver();
 
-        //do da query
-        return new PokemonListResult(QueryResult.POKEMON_BY_REGION, null, null);
+        List<Integer> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(REGION_QUERY);
+            preparedStatement.setString(1, region);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("id"));
+                names.add(resultSet.getString("name"));
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ids.add(0);
+            names.add(e.getMessage());
+        }
+
+        return new PokemonListResult(QueryResult.POKEMON_BY_REGION, ids, names);
     }
 
     @ApiMethod(name = "queryByTypeAndRegion")
     public QueryResult queryByTypeAndRegion(@Named("type") String type, @Named("region") String region) {
-        //SELECT P.id, P.name
-        //FROM Pokemon P
-        //JOIN PokemonTypes T ON P.id = T.pokemon
-        //JOIN Types Y ON Y.id = T.type
-        //JOIN Regions R ON R.id = P.region
-        //WHERE Y.name = (?) AND R.name = (?)
+        instantiateDriver();
 
-        //do da query
-        return new PokemonListResult(QueryResult.POKEMON_BY_TYPE_AND_REGION, null, null);
+        List<Integer> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(TYPE_REGION_QUERY);
+            preparedStatement.setString(1, type);
+            preparedStatement.setString(2, region);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("id"));
+                names.add(resultSet.getString("name"));
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ids.add(0);
+            names.add(e.getMessage());
+        }
+        return new PokemonListResult(QueryResult.POKEMON_BY_TYPE_AND_REGION, ids, names);
     }
 
     @ApiMethod(name = "queryByName")
@@ -101,11 +176,25 @@ public class MyEndpoint {
 
     @ApiMethod(name = "queryAll")
     public QueryResult queryAll() {
-        //SELECT P.id, P.name
-        //FROM Pokemon P
+        instantiateDriver();
 
-        //do da query
-        return new PokemonListResult(QueryResult.ALL_POKEMON, null, null);
+        List<Integer> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("id"));
+                names.add(resultSet.getString("name"));
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ids.add(0);
+            names.add(e.getMessage());
+        }
+        return new PokemonListResult(QueryResult.ALL_POKEMON, ids, names);
     }
 
     @ApiMethod(name = "querySelected")
