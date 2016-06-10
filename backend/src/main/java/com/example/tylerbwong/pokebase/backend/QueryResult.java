@@ -10,4 +10,7 @@ public abstract class QueryResult {
     public int[] getIntInfo() {
         return new int[0];
     }
+    public boolean getBoolean() {
+        return false;
+    }
 }

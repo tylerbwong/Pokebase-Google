@@ -1,9 +1,7 @@
 package com.app.pokebase.pokebase.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +14,6 @@ import android.widget.Spinner;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
-import com.app.pokebase.pokebase.querytasks.QueryTask;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 
 /**
@@ -93,7 +90,6 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
                 break;
             case R.id.submit_action:
                 //UPDATE database
-                new QueryTask().execute(new Pair<Context, String>(this, "Your mom."));
                 break;
             default:
                 break;

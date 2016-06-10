@@ -2,48 +2,88 @@ package com.app.pokebase.pokebase.querytasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
-import android.widget.Toast;
+import android.util.Pair;
 
+import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.example.tylerbwong.pokebase.backend.myApi.MyApi;
-import com.example.tylerbwong.pokebase.backend.myApi.model.MyBean;
+import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * @author Tyler Wong
+ * Created by brittanyberlanga on 6/9/16.
  */
-public class QueryTask extends AsyncTask<Pair<Context, String>, Void, MyBean> {
-   private static MyApi myApiService = null;
-   private Context context;
+public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryResult> {
+    public static final String ALL_POKEMON = "all";
+    public static final String POKEMON_BY_TYPE = "by_type";
+    public static final String POKEMON_BY_REGION = "by_region";
+    public static final String POKEMON_BY_TYPE_AND_REGION = "by_type_and_region";
+    public static final String SELECTED_POKEMON = "selected";
+    public static final String SELECTED_POKEMON_EVOLUTIONS = "selected_evolutions";
+    public static final String POKEMON_BY_NAME = "by_name";
+    public static final String CHECK_USERNAME = "check_username";
+    public static final String NEW_USER = "new_user";
+    public static final String NEW_TEAM = "new_team";
+    public static final String NEW_POKEMON_ON_TEAM = "new_team_pokemon";
+    public static final String UPDATE_TEAM = "update_team";
+    public static final String UPDATE_POKEMON = "update_pokemon";
+    public static final String DELETE_POKEMON = "delete_pokemon";
+    public static final String DELETE_TEAM = "delete_team";
 
-   @Override
-   protected MyBean doInBackground(Pair<Context, String>... params) {
-      if (myApiService == null) {  // Only do this once
-         MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-               new AndroidJsonFactory(), null)
-               .setRootUrl("https://pokebase-1335.appspot.com/_ah/api/");
-         // end options for devappserver
+    private static MyApi myApiService = null;
+    private Context context;
 
-         myApiService = builder.build();
-      }
+    @Override
+    protected QueryResult doInBackground(Pair<Context, String[]>... params) {
+        if (myApiService == null) {  // Only do this once
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
+                    new AndroidJsonFactory(), null)
+                    .setRootUrl("https://pokebase-1335.appspot.com/_ah/api/");
+            // end options for devappserver
 
-      context = params[0].first;
-      String name = params[0].second;
+            myApiService = builder.build();
+        }
 
-      try {
-         return myApiService.sayHi(name).execute();
-      }
-      catch (IOException e) {
-         //return e.getMessage();
-         return null;
-      }
-   }
+        context = params[0].first;
+        String[] queryInfo = params[0].second;
+        List<String> queryList = Arrays.asList(queryInfo);
+        String command = queryList.remove(0);
+        try {
+            switch (command) {
+                case ALL_POKEMON:
+                case POKEMON_BY_TYPE:
+                case POKEMON_BY_REGION:
+                case POKEMON_BY_TYPE_AND_REGION:
+                case SELECTED_POKEMON:
+                case SELECTED_POKEMON_EVOLUTIONS:
+                case POKEMON_BY_NAME:
+                case CHECK_USERNAME:
+                case NEW_USER:
+                case NEW_TEAM:
+                case NEW_POKEMON_ON_TEAM:
+                case UPDATE_TEAM:
+                case UPDATE_POKEMON:
+                case DELETE_POKEMON:
+                case DELETE_TEAM:
+            }
+            return myApiService.queryByType(queryList.get(0)).execute();
+        }
+        catch (IOException e) {
+            //return e.getMessage();
+            return null;
+        }
+    }
 
-   @Override
-   protected void onPostExecute(MyBean result) {
-      Toast.makeText(context, result.getData(), Toast.LENGTH_LONG).show();
-   }
+    @Override
+    protected void onPostExecute(QueryResult queryResult) {
+        if (context instanceof ApiCallback)
+        {
+            ApiCallback callback = (ApiCallback) context;
+            callback.onApiCallback(queryResult);
+        }
+    }
 }

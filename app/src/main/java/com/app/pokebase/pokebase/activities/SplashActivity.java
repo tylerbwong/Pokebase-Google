@@ -1,11 +1,12 @@
 package com.app.pokebase.pokebase.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
@@ -38,28 +39,22 @@ public class SplashActivity extends AppCompatActivity {
          mTitleLabel.setTypeface(robotoLight);
       }
 
-//      Thread preferenceThread = new Thread(new Runnable() {
-//         @Override
-//         public void run() {
-//            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-//                  getBaseContext());
-//
-//            boolean isFirstStart = preferences.getBoolean("firstStart", true);
-//
-//            if (!isFirstStart) {
-//               Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-//               startActivity(mainIntent);
-//            }
-//            else {
-//               SharedPreferences.Editor editor = preferences.edit();
-//               editor.putBoolean("firstStart", false);
-//               editor.apply();
-//               Intent startIntent = new Intent(SplashActivity.this, StartActivity.class);
-//               startActivity(startIntent);
-//            }
-//         }
-//      });
-//      preferenceThread.start();
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      if (pref.getBoolean("loggedIn", false)) {
+         Intent mainIntent = new Intent(this, MainActivity.class);
+         startActivity(mainIntent);
+         finish();
+      }
+      else if (pref.getBoolean("activity_executed", false) && !pref.getBoolean("loggedIn", false)) {
+         Intent loginIntent = new Intent(this, LoginActivity.class);
+         startActivity(loginIntent);
+         finish();
+      }
+      else {
+         Editor ed = pref.edit();
+         ed.putBoolean("activity_executed", true);
+         ed.commit();
+      }
    }
 
    @Override
