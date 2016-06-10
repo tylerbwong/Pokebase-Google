@@ -14,7 +14,7 @@ import javax.inject.Named;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -31,7 +31,7 @@ import java.sql.ResultSet;
 )
 public class MyEndpoint {
    private String url;
-
+   private final static String query = "SELECT P.id, P.name FROM Pokemon P WHERE P.name = ?";
    private final static String urlLocalProperty = "ae-cloudsql.local-database-url";
    private final static String urlCloudProperty = "ae-cloudsql.cloudsql-database-url";
 
@@ -47,7 +47,6 @@ public class MyEndpoint {
 
    @ApiMethod(name = "queryByType")
    public QueryResult queryByType(@Named("info") String[] info) {
-      ResultSet results;
       instantiateDriver();
 
       //do da query
@@ -59,38 +58,39 @@ public class MyEndpoint {
       names[1] = "Pikachu";
       try {
          Connection connection = DriverManager.getConnection(url);
-         Statement statement = connection.createStatement();
-         results = statement.executeQuery("SELECT P.id, P.name FROM Pokemon P WHERE P.name = 'Eevee'");
-         ids[2] = results.getInt("id");
-         names[2] = results.getString("name");
+         PreparedStatement preparedStatement = connection.prepareStatement(query);
+         preparedStatement.setString(1, "Eevee");
+         ResultSet resultSet = preparedStatement.executeQuery();
+         if  (resultSet.next()) {
+            ids[2] = resultSet.getInt("id");
+            names[2] = resultSet.getString("name");
+         }
          connection.close();
       }
       catch (Exception e) {
          e.printStackTrace();
+         names[2] = e.toString();
+         names[1] = e.getLocalizedMessage();
       }
       return new PokemonListResult(ids, names);
    }
 
    private void instantiateDriver() {
-      if (System.getProperty("com.google.appengine.runtime.version").startsWith("Google App Engine/")) {
-         url = System.getProperty(urlCloudProperty);
-
+      if (System
+            .getProperty("com.google.appengine.runtime.version").startsWith("Google App Engine/")) {
+         // Check the System properties to determine if we are running on appengine or not
+         // Google App Engine sets a few system properties that will reliably be present on a remote
+         // instance.
+         url = System.getProperty("ae-cloudsql.cloudsql-database-url");
          try {
+            // Load the class that provides the new "jdbc:google:mysql://" prefix.
             Class.forName("com.mysql.jdbc.GoogleDriver");
+         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
          }
-         catch (ClassNotFoundException e) {
-
-         }
-      }
-      else {
-         url = System.getProperty(urlLocalProperty);
-
-         try {
-            Class.forName("com.mysql.jdbc.Driver");
-         }
-         catch (ClassNotFoundException e) {
-
-         }
+      } else {
+         // Set the url with the local MySQL database connection url when running locally
+         url = System.getProperty("ae-cloudsql.local-database-url");
       }
    }
 }
