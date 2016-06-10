@@ -54,4 +54,6 @@
     <string name="lvl">Lvl. 100</string>
     <string name="exit">Exit</string>
     <string name="login">Login</string>
+    <string name="create_user">Create User</string>
+    <string name="go">Go!</string>
 </resources>

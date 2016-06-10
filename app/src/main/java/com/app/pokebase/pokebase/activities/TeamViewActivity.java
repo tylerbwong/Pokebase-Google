@@ -72,12 +72,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
       mPokemon = new ArrayList<>();
 
-      mPokemon.add(new PokemonTeamMember());
-      mPokemon.add(new PokemonTeamMember());
-      mPokemon.add(new PokemonTeamMember());
-      mPokemon.add(new PokemonTeamMember());
-      mPokemon.add(new PokemonTeamMember());
-
       LinearLayoutManager llm = new LinearLayoutManager(this);
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mPokemonList.setLayoutManager(llm);
@@ -107,8 +101,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
    @Override
    public void onFabAnimationEnd() {
-//      Intent intent = new Intent(this, PokebaseActivity.class);
-//      startActivityForResult(intent, REQUEST_CODE);
+      Intent intent = new Intent(this, MainActivity.class);
+      startActivityForResult(intent, REQUEST_CODE);
    }
 
    private void showBackDialog() {

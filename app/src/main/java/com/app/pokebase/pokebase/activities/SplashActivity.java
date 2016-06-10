@@ -42,18 +42,19 @@ public class SplashActivity extends AppCompatActivity {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       if (pref.getBoolean("loggedIn", false)) {
          Intent mainIntent = new Intent(this, MainActivity.class);
+         mainIntent.putExtra("userId", pref.getInt("userId", 0));
          startActivity(mainIntent);
          finish();
       }
-      else if (pref.getBoolean("activity_executed", false) && !pref.getBoolean("loggedIn", false)) {
+      else if (pref.getBoolean("appIntroFinished", false) && !pref.getBoolean("loggedIn", false)) {
          Intent loginIntent = new Intent(this, LoginActivity.class);
          startActivity(loginIntent);
          finish();
       }
       else {
          Editor ed = pref.edit();
-         ed.putBoolean("activity_executed", true);
-         ed.commit();
+         ed.putBoolean("appIntroFinished", true);
+         ed.apply();
       }
    }
 

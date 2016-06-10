@@ -59,7 +59,8 @@ public class MyEndpoint {
                     "JOIN Regions R ON R.id = P.region " +
                     "WHERE Y.name = ? " +
                     "AND R.name = ?";
-
+    private final static String ADD_NEW_USER =
+            "INSERT INTO Users VALUES (0, ?, ?)";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
@@ -232,11 +233,22 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "newUser")
-    public QueryResult newUser(@Named("name") String name) {
-        //INSERT INTO Users
-        //VALUES (?) --ensure autoincrement
+    public QueryResult newUser(@Named("name") String name, @Named("gender") String gender) {
+        instantiateDriver();
 
-        return new CheckResult(QueryResult.NEW_USER, false);
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, gender);
+            preparedStatement.executeUpdate();
+            connection.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new CheckResult(QueryResult.NEW_USER, true);
     }
 
     @ApiMethod(name = "newTeam")

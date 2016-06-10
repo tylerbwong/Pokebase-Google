@@ -1,8 +1,6 @@
 package com.app.pokebase.pokebase.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -14,20 +12,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.utilities.Typefaces;
-import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 
 /**
  * @author Tyler Wong
  */
-public class LoginActivity extends AppCompatActivity implements ApiCallback {
+public class SignUpActivity extends AppCompatActivity {
    private TextView mTitleLabel;
    private TextInputEditText mNameInput;
    private TextView mNameCount;
    private Button mExitButton;
-   private Button mCreateButton;
    private Button mLoginButton;
+   private Button mCreateButton;
    private String mUsername;
    private boolean mHasText = false;
 
@@ -38,18 +34,17 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
    final static String MAX_LENGTH = "/15";
 
    @Override
-   public void onCreate(Bundle savedInstanceBundle) {
-      super.onCreate(savedInstanceBundle);
-      setContentView(R.layout.activity_login);
-
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_signup);
       robotoLight = Typefaces.get(this, ROBOTO_PATH);
 
       mTitleLabel = (TextView) findViewById(R.id.title_label);
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mNameCount = (TextView) findViewById(R.id.name_count);
       mExitButton = (Button) findViewById(R.id.exit_button);
-      mCreateButton = (Button) findViewById(R.id.create_user);
       mLoginButton = (Button) findViewById(R.id.login_button);
+      mCreateButton = (Button) findViewById(R.id.create_user);
 
       mExitButton.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -58,17 +53,17 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
          }
       });
 
-      mCreateButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            switchToCreate();
-         }
-      });
-
       mLoginButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
-            login();
+            switchToLogin();
+         }
+      });
+
+      mCreateButton.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            createUser();
          }
       });
 
@@ -86,7 +81,8 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
 
             if (s.toString().trim().length() == 0) {
                mHasText = false;
-            } else {
+            }
+            else {
                mHasText = true;
             }
             mNameCount.setText(charLeft);
@@ -106,26 +102,17 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
    public String getUsername() {
       if (mHasText) {
          mUsername = mNameInput.getText().toString();
-      } else {
+      }
+      else {
          mUsername = DEFAULT_NAME;
       }
       return mUsername;
    }
 
-   private void login() {
-      //new QueryTask.execute();
-   }
-
-   @Override
-   public void onApiCallback(QueryResult result) {
-      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      SharedPreferences.Editor ed = pref.edit();
-      ed.putBoolean("loggedIn", true);
-      ed.putInt("userId", result.getIntInfo().get(0));
-      ed.apply();
-      Intent loadingIntent = new Intent(this, LoadingActivity.class);
-      loadingIntent.putExtra("username", mNameInput.getText().toString());
-      startActivity(loadingIntent);
+   private void createUser() {
+      Intent genderIntent = new Intent(this, GenderActivity.class);
+      genderIntent.putExtra("username", mNameInput.getText().toString());
+      startActivity(genderIntent);
    }
 
    private void close() {
@@ -136,8 +123,8 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
       startActivity(intent);
    }
 
-   private void switchToCreate() {
-      Intent createIntent = new Intent(this, SignUpActivity.class);
-      startActivity(createIntent);
+   private void switchToLogin() {
+      Intent loginIntent = new Intent(this, LoginActivity.class);
+      startActivity(loginIntent);
    }
 }
