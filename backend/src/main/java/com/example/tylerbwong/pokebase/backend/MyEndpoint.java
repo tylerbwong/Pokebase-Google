@@ -107,6 +107,15 @@ public class MyEndpoint {
                     "FROM TeamPokemon P" +
                     "WHERE P.teamId = ?";
 
+    private final static String USER_ID =
+            "SELECT U.id FROM Users U WHERE U.name = ?";
+
+    private final static String NEW_TEAM =
+            "INSERT INTO Teams Values (0, ?, ?)";
+
+    private final static String UPDATE_TEAM =
+            "UPDATE Teams SET name = ?, SET description = ? WHERE id = ?";
+
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
         instantiateDriver();
@@ -208,16 +217,6 @@ public class MyEndpoint {
             names.add(e.getMessage());
         }
         return new PokemonListResult(QueryResult.POKEMON_BY_TYPE_AND_REGION, ids, names);
-    }
-
-    @ApiMethod(name = "queryByName")
-    public QueryResult queryByName(@Named("name") String name) {
-        //SELECT P.id, P.name
-        //FROM Pokemon P
-        //WHERE P.name = (?)
-
-        //do da query
-        return new PokemonListResult(QueryResult.POKEMON_BY_NAME, null, null);
     }
 
     @ApiMethod(name = "queryAll")
@@ -353,14 +352,20 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "newTeam")
-    public QueryResult newTeam(@Named("userId") int userId, @Named("name") String name,
+    public QueryResult newTeam(@Named("id") String id, @Named("name") String name,
                                @Named("description") String description) {
+        instantiateDriver();
 
-        //INSERT INTO Teams
-        //VALUES (?), (?) --ensure autoincrement
-
-        //INSERT INTO UserTeams
-        //VALUES (?), (?)
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(NEW_TEAM);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, description);
+            preparedStatement.executeUpdate();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return new CheckResult(QueryResult.NEW_TEAM, true);
     }
@@ -380,11 +385,19 @@ public class MyEndpoint {
     @ApiMethod(name = "updateTeam")
     public QueryResult updateTeam(@Named("teamId") int teamId, @Named("name") String name,
                                   @Named("description") String description) {
+        instantiateDriver();
 
-        //QUERY THE NAME OF THE POKEMON
-
-        //INSERT INTO TeamPokemon
-        //VALUES (teamId?), (pokemonId?), (POKEMON NAME), (1), (null), (null), (null), (null)
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TEAM);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, description);
+            preparedStatement.setInt(3, teamId);
+            preparedStatement.executeUpdate();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return new CheckResult(QueryResult.UPDATE_TEAM, true);
     }

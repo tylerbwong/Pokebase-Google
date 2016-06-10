@@ -3,6 +3,7 @@ package com.app.pokebase.pokebase.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
@@ -49,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
     private TextView mWeightView;
     private TextView mExpView;
     private ListView mMovesList;
+    private RelativeLayout mLayout;
     private ActionBar mActionBar;
 
     @Override
@@ -75,6 +78,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         mWeightView = (TextView) findViewById(R.id.weight);
         mExpView = (TextView) findViewById(R.id.exp);
         mMovesList = (ListView) findViewById(R.id.moves_list);
+        mLayout = (RelativeLayout) findViewById(R.id.layout);
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -104,8 +108,11 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
             case R.id.add_action:
-                showAddTeamDialog();
+                showAddToTeamDialog();
                 break;
             default:
                 break;
@@ -129,19 +136,21 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         return true;
     }
 
-    private void showAddTeamDialog() {
+    private void showAddToTeamDialog() {
         String[] teams = new String[3];
         teams[0] = "hello";
         teams[1] = "goodbye";
         teams[2] = "what's up";
         new LovelyChoiceDialog(this)
               .setTopColorRes(R.color.colorPrimary)
-              .setTitle(R.string.add_team_title)
+              .setTitle("Choose a team to add " + mPokemonName + " to!")
               .setIcon(R.drawable.ic_add_circle_outline_white_36dp)
               .setItems(teams, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
                   @Override
                   public void onItemSelected(int position, String item) {
-
+                      Snackbar snackbar = Snackbar
+                            .make(mLayout, "Added " + mPokemonName + " to " + item, Snackbar.LENGTH_LONG);
+                      snackbar.show();
                   }
               })
               .show();
