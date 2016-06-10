@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +19,7 @@ import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
 import com.app.pokebase.pokebase.utilities.Typefaces;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /**
  * @author Tyler Wong
@@ -121,8 +121,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
    private void checkFields() {
       if (mHasText) {
          mLoginButton.setEnabled(true);
-      }
-      else {
+      } else {
          mLoginButton.setEnabled(false);
       }
    }
@@ -144,19 +143,18 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
          Intent loadingIntent = new Intent(this, LoadingActivity.class);
          loadingIntent.putExtra("username", mNameInput.getText().toString());
          startActivity(loadingIntent);
-      }
-      else {
+      } else {
          showIncorrectLoginDialog();
       }
    }
 
    private void showIncorrectLoginDialog() {
-      new AlertDialog.Builder(LoginActivity.this)
-            .setIcon(R.drawable.info)
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_48dp)
             .setTitle(R.string.not_found)
-            .setMessage(R.string.try_again)
-            .setPositiveButton(R.string.ok, null)
-            .show();
+            .setMessage(R.string.try_again).setCancelable(true)
+            .setPositiveButton(R.string.ok, null).setTopColor(getResources()
+            .getColor(R.color.colorPrimary)).show();
    }
 
    private void close() {
