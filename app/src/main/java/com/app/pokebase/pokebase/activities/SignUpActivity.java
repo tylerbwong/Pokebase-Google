@@ -29,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
    private TextInputEditText mNameInput;
    private TextView mNameCount;
    private Button mExitButton;
-   private Button mLoginButton;
+   private Button mSignUpButton;
    private Button mCreateButton;
    private String mUsername;
    private boolean mHasText = false;
@@ -50,8 +50,10 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mNameCount = (TextView) findViewById(R.id.name_count);
       mExitButton = (Button) findViewById(R.id.exit_button);
-      mLoginButton = (Button) findViewById(R.id.login_button);
+      mSignUpButton = (Button) findViewById(R.id.login_button);
       mCreateButton = (Button) findViewById(R.id.create_user);
+
+      mSignUpButton.setEnabled(false);
 
       mExitButton.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -60,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
          }
       });
 
-      mLoginButton.setOnClickListener(new View.OnClickListener() {
+      mSignUpButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
             switchToLogin();
@@ -92,6 +94,7 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
             else {
                mHasText = true;
             }
+            checkFields();
             mNameCount.setText(charLeft);
          }
 
@@ -114,6 +117,15 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
          mUsername = DEFAULT_NAME;
       }
       return mUsername;
+   }
+
+   private void checkFields() {
+      if (mHasText) {
+         mSignUpButton.setEnabled(true);
+      }
+      else {
+         mSignUpButton.setEnabled(false);
+      }
    }
 
    private void createUser() {

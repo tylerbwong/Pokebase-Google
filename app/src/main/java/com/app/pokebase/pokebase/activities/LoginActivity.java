@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
       mCreateButton = (Button) findViewById(R.id.create_user);
       mLoginButton = (Button) findViewById(R.id.login_button);
 
+      mLoginButton.setEnabled(false);
+
       mExitButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
@@ -92,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
             } else {
                mHasText = true;
             }
+            checkFields();
             mNameCount.setText(charLeft);
          }
 
@@ -113,6 +116,15 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
          mUsername = DEFAULT_NAME;
       }
       return mUsername;
+   }
+
+   private void checkFields() {
+      if (mHasText) {
+         mLoginButton.setEnabled(true);
+      }
+      else {
+         mLoginButton.setEnabled(false);
+      }
    }
 
    private void login() {

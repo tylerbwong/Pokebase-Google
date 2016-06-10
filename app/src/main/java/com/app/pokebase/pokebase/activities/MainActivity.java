@@ -2,6 +2,7 @@ package com.app.pokebase.pokebase.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -93,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
                   fragmentTransaction.commit();
                   return true;
 
+               case R.id.logout:
+                  logout();
+                  return true;
+
                default:
                   return false;
             }
@@ -117,6 +122,15 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
 
       mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
       actionBarDrawerToggle.syncState();
+   }
+
+   private void logout() {
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      SharedPreferences.Editor ed = pref.edit();
+      ed.putBoolean("loggedIn", false);
+      ed.apply();
+      Intent loginIntent = new Intent(this, LoginActivity.class);
+      startActivity(loginIntent);
    }
 
    private void hideKeyboard() {

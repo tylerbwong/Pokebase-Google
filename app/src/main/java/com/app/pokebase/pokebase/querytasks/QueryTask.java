@@ -69,6 +69,7 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
                 case SELECTED_POKEMON_EVOLUTIONS:
                 case POKEMON_BY_NAME:
                 case CHECK_USERNAME:
+                    return myApiService.queryCheckUser(queryList.get(1)).execute();
                 case NEW_USER:
                     return myApiService.newUser(queryList.get(1), queryList.get(2)).execute();
                 case NEW_TEAM:
