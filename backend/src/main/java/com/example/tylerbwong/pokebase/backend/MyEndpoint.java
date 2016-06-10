@@ -62,6 +62,9 @@ public class MyEndpoint {
     private final static String ADD_NEW_USER =
             "INSERT INTO Users VALUES (0, ?, ?)";
 
+    private final static String CHECK_USER =
+            "SELECT COUNT(*) AS count FROM Users U WHERE U.name = ?";
+
     private final static String SELECTED_INFO_QUERY =
             "SELECT P.id, P.name, P.height, P.weight, P.baseExp, R.name AS region " +
                     "FROM Pokemon P " +
@@ -290,11 +293,26 @@ public class MyEndpoint {
 
     @ApiMethod(name = "queryCheckUser")
     public QueryResult queryCheckUser(@Named("name") String name) {
-        //SELECT COUNT(*)
-        //FROM Users U
-        //WHERE U.name = (?)
+        boolean success = false;
+        int count = 0;
+        ResultSet resultSet;
+        instantiateDriver();
 
-        return new CheckResult(QueryResult.CHECK_USERNAME, false);
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(CHECK_USER);
+            preparedStatement.setString(1, name);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                count = resultSet.getInt("count");
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new CheckResult(QueryResult.CHECK_USERNAME, success, count);
     }
 
     @ApiMethod(name = "newUser")

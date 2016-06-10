@@ -56,4 +56,9 @@
     <string name="login">Login</string>
     <string name="create_user">Create User</string>
     <string name="go">Go!</string>
+    <string name="taken">Username Already Taken!</string>
+    <string name="new_name">Please enter a new username.</string>
+    <string name="ok">OK</string>
+    <string name="not_found">Username Not Found!</string>
+    <string name="try_again">Please try again.</string>
 </resources>

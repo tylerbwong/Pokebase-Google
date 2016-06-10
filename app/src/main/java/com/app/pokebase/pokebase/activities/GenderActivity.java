@@ -2,6 +2,7 @@ package com.app.pokebase.pokebase.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -101,6 +102,10 @@ public class GenderActivity extends AppCompatActivity implements ApiCallback {
       else {
          newUser[2] = "F";
       }
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      SharedPreferences.Editor ed = pref.edit();
+      ed.putBoolean("loggedIn", true);
+      ed.apply();
       new QueryTask().execute(new Pair<Context, String[]>(this, newUser));
    }
 }

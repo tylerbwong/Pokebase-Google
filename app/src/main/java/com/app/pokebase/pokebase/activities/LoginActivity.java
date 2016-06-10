@@ -6,15 +6,18 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
+import com.app.pokebase.pokebase.querytasks.QueryTask;
 import com.app.pokebase.pokebase.utilities.Typefaces;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 
@@ -113,19 +116,35 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
    }
 
    private void login() {
-      //new QueryTask.execute();
+      String[] login = new String[2];
+      login[0] = QueryTask.CHECK_USERNAME;
+      login[1] = mNameInput.getText().toString();
+      new QueryTask().execute(new Pair<Context, String[]>(this, login));
    }
 
    @Override
    public void onApiCallback(QueryResult result) {
-      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      SharedPreferences.Editor ed = pref.edit();
-      ed.putBoolean("loggedIn", true);
-      ed.putInt("userId", result.getIntInfo().get(0));
-      ed.apply();
-      Intent loadingIntent = new Intent(this, LoadingActivity.class);
-      loadingIntent.putExtra("username", mNameInput.getText().toString());
-      startActivity(loadingIntent);
+      if (result.getCount() == 1) {
+         SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+         SharedPreferences.Editor ed = pref.edit();
+         ed.putBoolean("loggedIn", true);
+         ed.apply();
+         Intent loadingIntent = new Intent(this, LoadingActivity.class);
+         loadingIntent.putExtra("username", mNameInput.getText().toString());
+         startActivity(loadingIntent);
+      }
+      else {
+         showIncorrectLoginDialog();
+      }
+   }
+
+   private void showIncorrectLoginDialog() {
+      new AlertDialog.Builder(LoginActivity.this)
+            .setIcon(R.drawable.info)
+            .setTitle(R.string.not_found)
+            .setMessage(R.string.try_again)
+            .setPositiveButton(R.string.ok, null)
+            .show();
    }
 
    private void close() {

@@ -1,23 +1,30 @@
 package com.app.pokebase.pokebase.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
+import com.app.pokebase.pokebase.interfaces.ApiCallback;
+import com.app.pokebase.pokebase.querytasks.QueryTask;
 import com.app.pokebase.pokebase.utilities.Typefaces;
+import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 
 /**
  * @author Tyler Wong
  */
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements ApiCallback {
    private TextView mTitleLabel;
    private TextInputEditText mNameInput;
    private TextView mNameCount;
@@ -110,9 +117,10 @@ public class SignUpActivity extends AppCompatActivity {
    }
 
    private void createUser() {
-      Intent genderIntent = new Intent(this, GenderActivity.class);
-      genderIntent.putExtra("username", mNameInput.getText().toString());
-      startActivity(genderIntent);
+      String[] signUp = new String[2];
+      signUp[0] = QueryTask.CHECK_USERNAME;
+      signUp[1] = mNameInput.getText().toString();
+      new QueryTask().execute(new Pair<Context, String[]>(this, signUp));
    }
 
    private void close() {
@@ -126,5 +134,30 @@ public class SignUpActivity extends AppCompatActivity {
    private void switchToLogin() {
       Intent loginIntent = new Intent(this, LoginActivity.class);
       startActivity(loginIntent);
+   }
+
+   @Override
+   public void onApiCallback(QueryResult result) {
+      if (result.getCount() == 0) {
+         SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+         SharedPreferences.Editor ed = pref.edit();
+         ed.putBoolean("loggedIn", true);
+         ed.apply();
+         Intent genderIntent = new Intent(this, GenderActivity.class);
+         genderIntent.putExtra("username", mNameInput.getText().toString());
+         startActivity(genderIntent);
+      }
+      else {
+         showUsedUsernameDialog();
+      }
+   }
+
+   private void showUsedUsernameDialog() {
+      new AlertDialog.Builder(SignUpActivity.this)
+            .setIcon(R.drawable.info)
+            .setTitle(R.string.taken)
+            .setMessage(R.string.new_name)
+            .setPositiveButton(R.string.yes, null)
+            .show();
    }
 }

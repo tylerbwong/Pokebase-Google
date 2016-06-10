@@ -15,6 +15,7 @@ public abstract class QueryResult {
     public static final String POKEMON_BY_NAME = "by_name";
     public static final String CHECK_USERNAME = "check_username";
     public static final String NEW_USER = "new_user";
+    public static final String LOGIN = "login";
     public static final String NEW_TEAM = "new_team";
     public static final String NEW_POKEMON_ON_TEAM = "new_team_pokemon";
     public static final String UPDATE_TEAM = "update_team";
@@ -36,5 +37,8 @@ public abstract class QueryResult {
     }
     public String getType() {
         return "";
+    }
+    public int getCount() {
+        return 0;
     }
 }
