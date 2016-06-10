@@ -86,7 +86,8 @@ public class MyEndpoint {
             "SELECT K.id, K.name " +
                     "FROM Pokemon P " +
                     "JOIN PokemonEvolutions E ON E.evolvesFrom = P.id " +
-                    "JOIN Pokemon K ON E.id = K.id";
+                    "JOIN Pokemon K ON E.id = K.id " +
+                    "WHERE P.id = ?";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
