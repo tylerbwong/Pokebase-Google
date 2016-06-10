@@ -9,6 +9,8 @@ import com.example.tylerbwong.pokebase.backend.myApi.MyApi;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,6 +29,14 @@ public class NewQueryTask extends AsyncTask<Pair<Context, String[]>, Void, Query
                     new AndroidJsonFactory(), null)
                     .setRootUrl("https://pokebase-1335.appspot.com/_ah/api/");
             // end options for devappserver
+//            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+//                  .setRootUrl("http://10.0.2.2:8080/_ah/api/") // 10.0.2.2 is localhost's IP address in Android emulator
+//                  .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+//                      @Override
+//                      public void initialize(AbstractGoogleClientRequest abstractGoogleClientRequest) throws IOException {
+//                          abstractGoogleClientRequest.setDisableGZipContent(true);
+//                      }
+//                  });
 
             myApiService = builder.build();
         }

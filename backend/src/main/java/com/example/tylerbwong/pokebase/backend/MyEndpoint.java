@@ -12,39 +12,85 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import javax.inject.Named;
 
-/** An endpoint class we are exposing */
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
+/**
+ * An endpoint class we are exposing
+ */
 @Api(
-  name = "myApi",
-  version = "v1",
-  namespace = @ApiNamespace(
-    ownerDomain = "backend.pokebase.tylerbwong.example.com",
-    ownerName = "backend.pokebase.tylerbwong.example.com",
-    packagePath=""
-  )
+      name = "myApi",
+      version = "v1",
+      namespace = @ApiNamespace(
+            ownerDomain = "backend.pokebase.tylerbwong.example.com",
+            ownerName = "backend.pokebase.tylerbwong.example.com",
+            packagePath = ""
+      )
 )
 public class MyEndpoint {
+   private String url;
 
-    /** A simple endpoint method that takes a name and says Hi back */
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
-        MyBean response = new MyBean();
-        response.setData("Hi, " + name);
+   private final static String urlLocalProperty = "ae-cloudsql.local-database-url";
+   private final static String urlCloudProperty = "ae-cloudsql.cloudsql-database-url";
 
-        return response;
-    }
+   /**
+    * A simple endpoint method that takes a name and says Hi back
+    */
+   @ApiMethod(name = "sayHi")
+   public MyBean sayHi(@Named("name") String name) {
+      MyBean response = new MyBean();
+      response.setData("Hi " + name);
+      return response;
+   }
 
-    @ApiMethod(name = "queryByType")
-    public QueryResult queryByType(@Named("info") String[] info) {
-        //do da query
-        int[] ids = new int[3];
-        ids[0] = 1;
-        ids[1] = 25;
-        ids[2] = 133;
-        String[] names = new String[3];
-        names[0] = "Bulbasaur";
-        names[1] = "Pikachu";
-        names[2] = "Eevee";
-        return new PokemonListResult(ids, names);
-    }
+   @ApiMethod(name = "queryByType")
+   public QueryResult queryByType(@Named("info") String[] info) {
+      ResultSet results;
+      instantiateDriver();
 
+      //do da query
+      int[] ids = new int[3];
+      ids[0] = 1;
+      ids[1] = 25;
+      String[] names = new String[3];
+      names[0] = "Bulbasaur";
+      names[1] = "Pikachu";
+      try {
+         Connection connection = DriverManager.getConnection(url);
+         Statement statement = connection.createStatement();
+         results = statement.executeQuery("SELECT P.id, P.name FROM Pokemon P WHERE P.name = 'Eevee'");
+         ids[2] = results.getInt("id");
+         names[2] = results.getString("name");
+         connection.close();
+      }
+      catch (Exception e) {
+         e.printStackTrace();
+      }
+      return new PokemonListResult(ids, names);
+   }
+
+   private void instantiateDriver() {
+      if (System.getProperty("com.google.appengine.runtime.version").startsWith("Google App Engine/")) {
+         url = System.getProperty(urlCloudProperty);
+
+         try {
+            Class.forName("com.mysql.jdbc.GoogleDriver");
+         }
+         catch (ClassNotFoundException e) {
+
+         }
+      }
+      else {
+         url = System.getProperty(urlLocalProperty);
+
+         try {
+            Class.forName("com.mysql.jdbc.Driver");
+         }
+         catch (ClassNotFoundException e) {
+
+         }
+      }
+   }
 }

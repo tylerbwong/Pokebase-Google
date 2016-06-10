@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author Tyler Wong
  */
-public class PokebaseFragment extends Fragment implements ApiCallback{
+public class PokebaseFragment extends Fragment implements ApiCallback {
     private Spinner mTypeSpinner;
     private Spinner mRegionSpinner;
     private RecyclerView mPokemonList;

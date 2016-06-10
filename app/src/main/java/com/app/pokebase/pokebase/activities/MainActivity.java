@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
                   fragmentTransaction.replace(R.id.frame, pokeFragment);
                   fragmentTransaction.commit();
                   String[] something = new String[1];
-                  something[0] = "hello";
+                  something[0] = "Bulbasaur";
                   new NewQueryTask().execute(new Pair<Context, String[]>(MainActivity.this, something));
                   return true;
 
