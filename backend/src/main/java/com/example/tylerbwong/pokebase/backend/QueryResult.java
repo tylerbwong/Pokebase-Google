@@ -24,6 +24,7 @@ public abstract class QueryResult {
     public static final String DELETE_TEAM = "delete_team";
     public static final String ALL_TYPES_REGIONS = "all_types_and_regions";
     public static final String ALL_TEAMS = "all_teams";
+    public static final String TEAM_BY_ID = "team_by_id";
     public List<String> getStringInfo() {
         return null;
     }
@@ -43,6 +44,15 @@ public abstract class QueryResult {
         return 0;
     }
     public List<List<Integer>> getListOfLists() {
+        return null;
+    }
+    public List<List<String>> getListOfStringLists() {
+        return null;
+    }
+    public List<Integer> getMoreIntInfo() {
+        return null;
+    }
+    public List<Integer> getMoreMoreIntInfo() {
         return null;
     }
 }

@@ -96,12 +96,16 @@ public class MyEndpoint {
                     "WHERE U.name = ? " +
                     "ORDER BY T.id";
     private final static String ALL_TEAM_POKEMON =
-            "SELECT T.id, P.pokemonId " +
+            "SELECT T.id, K.pokemonId " +
                     "FROM Teams T " +
                     "JOIN Users U ON U.id = M.userId " +
                     "JOIN TeamPokemon K ON K.teamId = T.id" +
                     "WHERE U.name = ? " +
                     "ORDER BY T.id";
+    private final static String POKEMON_BY_TEAM =
+            "SELECT P.id, P.pokemonId, P.nickname, P.level, P.moveOne, P.moveTwo, P.moveThree, P.moveFour " +
+                    "FROM TeamPokemon P" +
+                    "WHERE P.teamId = ?";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
@@ -434,6 +438,67 @@ public class MyEndpoint {
             teamNames.add(e.getMessage());
         }
         return new PokemonTeamResult(teamIds, teamNames, teamDescriptions, pokemon);
+    }
+
+    @ApiMethod(name = "queryTeamId")
+    public QueryResult queryTeamId(@Named("teamId") int teamId) {
+        instantiateDriver();
+
+        List<Integer> memberIds = new ArrayList<>();
+        List<Integer> pokemonIds = new ArrayList<>();
+        List<String> nicknames = new ArrayList<>();
+        List<Integer> levels = new ArrayList<>();
+        List<List<String>> moves = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(POKEMON_BY_TEAM);
+            preparedStatement.setInt(1, teamId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                memberIds.add(resultSet.getInt("id"));
+                pokemonIds.add(resultSet.getInt("pokemonId"));
+                nicknames.add(resultSet.getString("nickname"));
+                levels.add(resultSet.getInt("level"));
+
+                List<String> moveSet = new ArrayList<>();
+                String move = resultSet.getString("moveOne");
+                if (move == null) {
+                    moveSet.add("");
+                }
+                else {
+                    moveSet.add(move);
+                }
+                move = resultSet.getString("moveTwo");
+                if (move == null) {
+                    moveSet.add("");
+                }
+                else {
+                    moveSet.add(move);
+                }
+                move = resultSet.getString("moveThree");
+                if (move == null) {
+                    moveSet.add("");
+                }
+                else {
+                    moveSet.add(move);
+                }
+                move = resultSet.getString("moveFour");
+                if (move == null) {
+                    moveSet.add("");
+                }
+                else {
+                    moveSet.add(move);
+                }
+                moves.add(moveSet);
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            nicknames.add(e.getMessage());
+        }
+
+        return new TeamPokemonResult(memberIds, pokemonIds, nicknames, levels, moves);
     }
 
     @ApiMethod(name = "deleteTeam")

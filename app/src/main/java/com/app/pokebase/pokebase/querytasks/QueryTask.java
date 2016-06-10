@@ -34,6 +34,7 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
     public static final String DELETE_TEAM = "delete_team";
     public static final String ALL_TYPES_REGIONS = "all_types_and_regions";
     public static final String ALL_TEAMS = "all_teams";
+    public static final String TEAM_BY_ID = "team_by_id";
 
     private static MyApi myApiService = null;
     private Context context;
@@ -83,6 +84,8 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
                     return myApiService.queryAllTypesRegions().execute();
                 case ALL_TEAMS:
                     return myApiService.queryAllTeams(queryList.get(1)).execute();
+                case TEAM_BY_ID:
+                    return myApiService.queryTeamId(Integer.valueOf(queryList.get(1))).execute();
                 default:
                     return null;
             }
