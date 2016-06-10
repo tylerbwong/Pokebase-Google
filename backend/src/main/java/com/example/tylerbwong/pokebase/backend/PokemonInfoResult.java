@@ -32,4 +32,9 @@ public class PokemonInfoResult extends QueryResult {
     public int[] getIntInfo() {
         return mValues;
     }
+
+    @Override
+    public String getType() {
+        return QueryResult.SELECTED_POKEMON;
+    }
 }

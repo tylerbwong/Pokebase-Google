@@ -31,35 +31,45 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
     private String url;
-    private final static String query = "SELECT P.id, P.name FROM Pokemon P WHERE P.name = ?";
+    private final static String TYPE_QUERY =
+            "SELECT P.id, P.name " +
+            "FROM Pokemon P " +
+            "JOIN PokemonTypes T ON P.id = T.pokemonId" +
+            "JOIN Types Y ON Y.id = T.typeId " +
+            "WHERE Y.name = ?";
 
     @ApiMethod(name = "queryByType")
     public QueryResult queryByType(@Named("type") String type) {
         instantiateDriver();
 
-        //do da query
-        int[] ids = new int[3];
-        ids[0] = 1;
-        ids[1] = 25;
-        String[] names = new String[3];
-        names[0] = "Bulbasaur";
-        names[1] = "Pikachu";
+        int[] ids = null;
+        String[] names = null;
         try {
             Connection connection = DriverManager.getConnection(url);
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "Eevee");
+            PreparedStatement preparedStatement = connection.prepareStatement(TYPE_QUERY);
+            preparedStatement.setString(1, "Water");
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                ids[2] = resultSet.getInt("id");
-                names[2] = resultSet.getString("name");
+            int size = resultSet.getFetchSize();
+            ids = new int[size];
+            names = new String[size];
+            int i = 0;
+            while (resultSet.next()) {
+                ids[i] = resultSet.getInt("id");
+                names[i] = resultSet.getString("name");
+                i++;
             }
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
-            names[2] = e.toString();
-            names[1] = e.getLocalizedMessage();
+            if (names != null && names.length > 0) {
+                names[0] = e.toString();
+            }
+            else {
+                names = new String[1];
+                names[0] = e.toString();
+            }
         }
-        return new PokemonListResult(ids, names);
+        return new PokemonListResult(QueryResult.POKEMON_BY_TYPE, ids, names);
     }
 
     @ApiMethod(name = "queryByRegion")
@@ -70,7 +80,7 @@ public class MyEndpoint {
         //WHERE R.name = (?)
 
         //do da query
-        return new PokemonListResult(null, null);
+        return new PokemonListResult(QueryResult.POKEMON_BY_REGION, null, null);
     }
 
     @ApiMethod(name = "queryByTypeAndRegion")
@@ -83,7 +93,7 @@ public class MyEndpoint {
         //WHERE Y.name = (?) AND R.name = (?)
 
         //do da query
-        return new PokemonListResult(null, null);
+        return new PokemonListResult(QueryResult.POKEMON_BY_TYPE_AND_REGION, null, null);
     }
 
     @ApiMethod(name = "queryByName")
@@ -93,7 +103,7 @@ public class MyEndpoint {
         //WHERE P.name = (?)
 
         //do da query
-        return new PokemonListResult(null, null);
+        return new PokemonListResult(QueryResult.POKEMON_BY_NAME, null, null);
     }
 
     @ApiMethod(name = "queryAll")
@@ -102,7 +112,7 @@ public class MyEndpoint {
         //FROM Pokemon P
 
         //do da query
-        return new PokemonListResult(null, null);
+        return new PokemonListResult(QueryResult.ALL_POKEMON, null, null);
     }
 
     @ApiMethod(name = "querySelected")
@@ -127,7 +137,7 @@ public class MyEndpoint {
         //JOIN PokemonEvolutions E ON E.id = P.id
         //WHERE E.evolves_from = (?)
 
-        return new PokemonListResult(null, null);
+        return new PokemonListResult(QueryResult.SELECTED_POKEMON_EVOLUTIONS, null, null);
     }
 
     @ApiMethod(name = "queryCheckUser")
@@ -136,7 +146,7 @@ public class MyEndpoint {
         //FROM Users U
         //WHERE U.name = (?)
 
-        return new CheckResult(false);
+        return new CheckResult(QueryResult.CHECK_USERNAME, false);
     }
 
     @ApiMethod(name = "newUser")
@@ -144,7 +154,7 @@ public class MyEndpoint {
         //INSERT INTO Users
         //VALUES (?) --ensure autoincrement
 
-        return new CheckResult(false);
+        return new CheckResult(QueryResult.NEW_USER, false);
     }
 
     @ApiMethod(name = "newTeam")
@@ -157,7 +167,7 @@ public class MyEndpoint {
         //INSERT INTO UserTeams
         //VALUES (?), (?)
 
-        return new CheckResult(true);
+        return new CheckResult(QueryResult.NEW_TEAM, true);
     }
 
     @ApiMethod(name = "newPokemonTeam")
@@ -169,7 +179,7 @@ public class MyEndpoint {
         //INSERT INTO TeamPokemon
         //VALUES (teamId?), (pokemonId?), (POKEMON NAME), (1), (null), (null), (null), (null)
 
-        return new CheckResult(true);
+        return new CheckResult(QueryResult.NEW_POKEMON_ON_TEAM, true);
     }
 
     @ApiMethod(name = "updateTeam")
@@ -181,7 +191,7 @@ public class MyEndpoint {
         //INSERT INTO TeamPokemon
         //VALUES (teamId?), (pokemonId?), (POKEMON NAME), (1), (null), (null), (null), (null)
 
-        return new CheckResult(true);
+        return new CheckResult(QueryResult.UPDATE_TEAM, true);
     }
 
     @ApiMethod(name = "queryAllTeams")
@@ -210,7 +220,7 @@ public class MyEndpoint {
         //WHERE U.id = (userId ?)
         //AND T.id = (teamId ?)
 
-        return new CheckResult(true);
+        return new CheckResult(QueryResult.DELETE_TEAM, true);
     }
 
     @ApiMethod(name = "deleteTeamPokemon")
@@ -226,7 +236,7 @@ public class MyEndpoint {
         //AND T.id = (teamId ?)
         //AND TP.pokemonId = (pokemonId ?)
 
-        return new CheckResult(true);
+        return new CheckResult(QueryResult.DELETE_POKEMON, true);
     }
 
     @ApiMethod(name = "updateTeamPokemon")
@@ -249,7 +259,7 @@ public class MyEndpoint {
         //AND TP.pokemonId = pokemonId
 
 
-        return new CheckResult(true);
+        return new CheckResult(QueryResult.UPDATE_POKEMON, true);
     }
 
     private void instantiateDriver() {

@@ -6,10 +6,11 @@ package com.example.tylerbwong.pokebase.backend;
 public class PokemonListResult extends QueryResult {
     public final int[] mIds;
     public final String[] mNames;
-    private int mCount = 0;
-    public PokemonListResult(int[] ids, String[] names) {
+    private String mType;
+    public PokemonListResult(String type, int[] ids, String[] names) {
         this.mIds = ids;
         this.mNames = names;
+        this.mType = type;
     }
 
     @Override
@@ -20,5 +21,10 @@ public class PokemonListResult extends QueryResult {
     @Override
     public int[] getIntInfo() {
         return mIds;
+    }
+
+    @Override
+    public String getType() {
+        return mType;
     }
 }

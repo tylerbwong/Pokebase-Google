@@ -51,7 +51,8 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
         context = params[0].first;
         String[] queryInfo = params[0].second;
         List<String> queryList = Arrays.asList(queryInfo);
-        String command = queryList.remove(0);
+        //the first item is the command
+        String command = queryList.get(0);
         try {
             switch (command) {
                 case ALL_POKEMON:
