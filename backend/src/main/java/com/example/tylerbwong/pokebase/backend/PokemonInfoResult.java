@@ -8,26 +8,20 @@ import java.util.List;
 public class PokemonInfoResult extends QueryResult {
     private List<String> mMoves;
     private List<Integer> mValues; //id, height, weight, baseExp
-    private List<String> mOtherValues; //name, region
-    private int count;
+    private List<String> mOtherValues; //name, region, type1, (type2)
     public PokemonInfoResult(List<Integer> values, List<String> otherValues, List<String> moves) {
         this.mMoves = moves;
         this.mValues = values;
         this.mOtherValues = otherValues;
-        this.count = 0;
     }
     @Override
     public List<String> getStringInfo() {
-        switch (count) {
-            case 0:
-                count++;
-                return mOtherValues;
-            case 1:
-                count++;
-                return mMoves;
-            default:
-        }
-        return null;
+        return mOtherValues;
+    }
+
+    @Override
+    public List<String> getMoreStringInfo() {
+        return mMoves;
     }
 
     @Override

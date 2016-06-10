@@ -42,15 +42,15 @@ public class MyEndpoint {
             "SELECT R.name FROM Regions R";
     private final static String TYPE_QUERY =
             "SELECT P.id, P.name " +
-            "FROM Pokemon P " +
-            "JOIN PokemonTypes T ON P.id = T.pokemonId " +
-            "JOIN Types Y ON Y.id = T.typeId " +
-            "WHERE Y.name = ?";
+                    "FROM Pokemon P " +
+                    "JOIN PokemonTypes T ON P.id = T.pokemonId " +
+                    "JOIN Types Y ON Y.id = T.typeId " +
+                    "WHERE Y.name = ?";
     private final static String REGION_QUERY =
-                            "SELECT P.id, P.name " +
-                            "FROM Pokemon P " +
-                            "JOIN Regions R ON R.id = P.region " +
-                            "WHERE R.name = ?";
+            "SELECT P.id, P.name " +
+                    "FROM Pokemon P " +
+                    "JOIN Regions R ON R.id = P.region " +
+                    "WHERE R.name = ?";
     private final static String TYPE_REGION_QUERY =
             "SELECT P.id, P.name " +
                     "FROM Pokemon P " +
@@ -61,6 +61,29 @@ public class MyEndpoint {
                     "AND R.name = ?";
     private final static String ADD_NEW_USER =
             "INSERT INTO Users VALUES (0, ?, ?)";
+
+    private final static String SELECTED_INFO_QUERY =
+            "SELECT P.id, P.name, P.height, P.weight, P.baseExp, R.name AS region " +
+                    "FROM Pokemon P " +
+                    "JOIN Regions R ON P.region = R.id " +
+                    "WHERE P.id = ?";
+    private final static String SELECTED_TYPES_QUERY =
+            "SELECT T.name " +
+                    "FROM Pokemon P " +
+                    "JOIN PokemonTypes Y ON Y.pokemonId = P.id " +
+                    "JOIN Types T ON Y.typeId = T.id " +
+                    "WHERE P.id = ?";
+    private final static String SELECTED_MOVES_QUERY =
+            "SELECT DISTINCT M.name " +
+                    "FROM Pokemon P " +
+                    "JOIN PokemonMoves O ON P.id = O.pokemonId " +
+                    "JOIN Moves M ON O.moveId = M.id " +
+                    "WHERE P.id = ?";
+    private final static String SELECTED_EVOLUTIONS_QUERY =
+            "SELECT K.id, K.name " +
+                    "FROM Pokemon P " +
+                    "JOIN PokemonEvolutions E ON E.evolvesFrom = P.id " +
+                    "JOIN Pokemon K ON E.id = K.id";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
@@ -200,27 +223,69 @@ public class MyEndpoint {
 
     @ApiMethod(name = "querySelected")
     public QueryResult querySelected(@Named("id") int id) {
-        //SELECT P.id, P.name, P.height, P.weight, P.baseExp, R.name
-        //FROM Pokemon P
-        //JOIN Region R ON P.region = R.id
-        //WHERE P.id = (?)
+        instantiateDriver();
 
+        List<Integer> intInfo = new ArrayList<>();
+        List<String> stringInfo = new ArrayList<>();
+        List<String> movesInfo = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECTED_INFO_QUERY);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                intInfo.add(resultSet.getInt("id"));
+                stringInfo.add(resultSet.getString("name"));
+                intInfo.add(resultSet.getInt("height"));
+                intInfo.add(resultSet.getInt("weight"));
+                intInfo.add(resultSet.getInt("baseExp"));
+                stringInfo.add(resultSet.getString("region"));
+            }
+            preparedStatement = connection.prepareStatement(SELECTED_TYPES_QUERY);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                stringInfo.add(resultSet.getString("name"));
+            }
+            preparedStatement = connection.prepareStatement(SELECTED_MOVES_QUERY);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                movesInfo.add(resultSet.getString("name"));
+            }
 
-        //query for types
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            stringInfo.add(e.getMessage());
+        }
 
-        //query for moves
-
-        return new PokemonInfoResult(null, null, null);
+        return new PokemonInfoResult(intInfo, stringInfo, movesInfo);
     }
 
     @ApiMethod(name = "queryEvolutions")
     public QueryResult queryEvolutions(@Named("id") int id) {
-        //SELECT P.id, P.name
-        //FROM Pokemon P
-        //JOIN PokemonEvolutions E ON E.id = P.id
-        //WHERE E.evolves_from = (?)
+        instantiateDriver();
 
-        return new PokemonListResult(QueryResult.SELECTED_POKEMON_EVOLUTIONS, null, null);
+        List<Integer> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECTED_EVOLUTIONS_QUERY);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("id"));
+                names.add(resultSet.getString("name"));
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ids.add(0);
+            names.add(e.getMessage());
+        }
+
+        return new PokemonListResult(QueryResult.SELECTED_POKEMON_EVOLUTIONS, ids, names);
     }
 
     @ApiMethod(name = "queryCheckUser")
@@ -243,8 +308,7 @@ public class MyEndpoint {
             preparedStatement.setString(2, gender);
             preparedStatement.executeUpdate();
             connection.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
