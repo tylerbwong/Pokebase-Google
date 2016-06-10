@@ -170,4 +170,9 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
       Intent createIntent = new Intent(this, SignUpActivity.class);
       startActivity(createIntent);
    }
+
+   @Override
+   public void onBackPressed() {
+
+   }
 }

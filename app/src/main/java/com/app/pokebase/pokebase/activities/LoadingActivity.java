@@ -13,6 +13,9 @@ import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.utilities.Typefaces;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * @author Tyler Wong
  */
@@ -24,6 +27,7 @@ public class LoadingActivity extends AppCompatActivity implements ApiCallback {
    Typeface robotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
+   final static int LOADING_TIME = 3000;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -40,18 +44,20 @@ public class LoadingActivity extends AppCompatActivity implements ApiCallback {
       Intent introIntent = getIntent();
       mUsername = introIntent.getStringExtra("username");
 
-//      TimerTask timerTask = new TimerTask() {
-//         @Override
-//         public void run() {
-//            switchToMain();
-//         }
-//      };
-//
-//      Timer timer = new Timer();
-//      timer.schedule(timerTask, LOADING_TIME);
+      TimerTask timerTask = new TimerTask() {
+         @Override
+         public void run() {
+            switchToMain();
+         }
+      };
 
-      // login query task
-      switchToMain();
+      Timer timer = new Timer();
+      timer.schedule(timerTask, LOADING_TIME);
+   }
+
+   @Override
+   public void onBackPressed() {
+
    }
 
    private void switchToMain() {
@@ -67,7 +73,6 @@ public class LoadingActivity extends AppCompatActivity implements ApiCallback {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
       ed.putBoolean("loggedIn", true);
-      ed.putInt("userId", result.getIntInfo().get(0));
       ed.apply();
    }
 }

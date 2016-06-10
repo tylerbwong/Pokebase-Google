@@ -88,6 +88,11 @@ public class GenderActivity extends AppCompatActivity implements ApiCallback {
       startActivity(loadingIntent);
    }
 
+   @Override
+   public void onBackPressed() {
+
+   }
+
    public boolean isBoy() {
       return mIsBoy;
    }

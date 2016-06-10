@@ -160,6 +160,11 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
       }
    }
 
+   @Override
+   public void onBackPressed() {
+
+   }
+
    private void showUsedUsernameDialog() {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_48dp)
