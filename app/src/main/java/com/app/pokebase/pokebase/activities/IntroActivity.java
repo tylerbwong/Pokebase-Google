@@ -1,6 +1,8 @@
 package com.app.pokebase.pokebase.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.app.pokebase.pokebase.fragments.IntroTeamFragment;
 import com.app.pokebase.pokebase.fragments.IntroPokebaseFragment;
@@ -31,6 +33,10 @@ public class IntroActivity extends AppIntro {
 
    @Override
    public void onDonePressed() {
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      SharedPreferences.Editor ed = pref.edit();
+      ed.putBoolean("appIntroFinished", true);
+      ed.apply();
       Intent signUpIntent = new Intent(this, SignUpActivity.class);
       startActivity(signUpIntent);
    }

@@ -42,7 +42,6 @@ public class SplashActivity extends AppCompatActivity {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       if (pref.getBoolean("loggedIn", false)) {
          Intent mainIntent = new Intent(this, MainActivity.class);
-         mainIntent.putExtra("userId", pref.getInt("userId", 0));
          startActivity(mainIntent);
          finish();
       }
