@@ -1,25 +1,27 @@
 package com.example.tylerbwong.pokebase.backend;
 
+import java.util.List;
+
 /**
  * Created by brittanyberlanga on 6/9/16.
  */
 public class PokemonListResult extends QueryResult {
-    public final int[] mIds;
-    public final String[] mNames;
+    public final List<Integer> mIds;
+    public final List<String> mNames;
     private String mType;
-    public PokemonListResult(String type, int[] ids, String[] names) {
+    public PokemonListResult(String type, List<Integer> ids, List<String> names) {
         this.mIds = ids;
         this.mNames = names;
         this.mType = type;
     }
 
     @Override
-    public String[] getStringInfo() {
+    public List<String> getStringInfo() {
         return mNames;
     }
 
     @Override
-    public int[] getIntInfo() {
+    public List<Integer> getIntInfo() {
         return mIds;
     }
 

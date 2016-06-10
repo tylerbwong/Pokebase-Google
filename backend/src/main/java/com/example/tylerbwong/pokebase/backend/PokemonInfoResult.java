@@ -1,21 +1,23 @@
 package com.example.tylerbwong.pokebase.backend;
 
+import java.util.List;
+
 /**
  * Created by brittanyberlanga on 6/9/16.
  */
 public class PokemonInfoResult extends QueryResult {
-    private String[] mMoves;
-    private int[] mValues; //id, height, weight, baseExp
-    private String[] mOtherValues; //name, region
+    private List<String> mMoves;
+    private List<Integer> mValues; //id, height, weight, baseExp
+    private List<String> mOtherValues; //name, region
     private int count;
-    public PokemonInfoResult(int[] values, String[] otherValues, String[] moves) {
+    public PokemonInfoResult(List<Integer> values, List<String> otherValues, List<String> moves) {
         this.mMoves = moves;
         this.mValues = values;
         this.mOtherValues = otherValues;
         this.count = 0;
     }
     @Override
-    public String[] getStringInfo() {
+    public List<String> getStringInfo() {
         switch (count) {
             case 0:
                 count++;
@@ -29,7 +31,7 @@ public class PokemonInfoResult extends QueryResult {
     }
 
     @Override
-    public int[] getIntInfo() {
+    public List<Integer> getIntInfo() {
         return mValues;
     }
 

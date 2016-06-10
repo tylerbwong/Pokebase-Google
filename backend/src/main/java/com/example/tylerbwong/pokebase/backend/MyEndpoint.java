@@ -14,6 +14,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Named;
 
@@ -42,33 +44,24 @@ public class MyEndpoint {
     public QueryResult queryByType(@Named("type") String type) {
         instantiateDriver();
 
-        int[] ids = null;
-        String[] names = null;
+        List<Integer> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement preparedStatement = connection.prepareStatement(TYPE_QUERY);
             preparedStatement.setString(1, "Water");
             ResultSet resultSet = preparedStatement.executeQuery();
-            int size = resultSet.getFetchSize();
-            ids = new int[size];
-            names = new String[size];
-            int i = 0;
             while (resultSet.next()) {
-                ids[i] = resultSet.getInt("id");
-                names[i] = resultSet.getString("name");
-                i++;
+                ids.add(resultSet.getInt("id"));
+                names.add(resultSet.getString("name"));
             }
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
-            if (names != null && names.length > 0) {
-                names[0] = e.toString();
-            }
-            else {
-                names = new String[1];
-                names[0] = e.toString();
-            }
+            ids.add(0);
+            names.add(e.getMessage());
         }
+
         return new PokemonListResult(QueryResult.POKEMON_BY_TYPE, ids, names);
     }
 

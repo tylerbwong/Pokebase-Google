@@ -1,5 +1,7 @@
 package com.example.tylerbwong.pokebase.backend;
 
+import java.util.List;
+
 /**
  * Created by brittanyberlanga on 6/9/16.
  */
@@ -19,11 +21,11 @@ public abstract class QueryResult {
     public static final String UPDATE_POKEMON = "update_pokemon";
     public static final String DELETE_POKEMON = "delete_pokemon";
     public static final String DELETE_TEAM = "delete_team";
-    public String[] getStringInfo() {
-        return new String[0];
+    public List<String> getStringInfo() {
+        return null;
     }
-    public int[] getIntInfo() {
-        return new int[0];
+    public List<Integer> getIntInfo() {
+        return null;
     }
     public boolean getBoolean() {
         return false;
