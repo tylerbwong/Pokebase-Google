@@ -22,11 +22,12 @@ import com.app.pokebase.pokebase.fragments.PokebaseFragment;
 import com.app.pokebase.pokebase.fragments.TeamsFragment;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /**
  * @author Tyler Wong
  */
-public class MainActivity extends AppCompatActivity implements ApiCallback{
+public class MainActivity extends AppCompatActivity implements ApiCallback {
    private NavigationView mNavigationView;
    private DrawerLayout mDrawerLayout;
    private Toolbar mToolbar;
@@ -55,12 +56,11 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
       mUsernameView = (TextView) headerView.findViewById(R.id.username);
 
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      mUsernameView.setText(pref.getString("username",""));
+      mUsernameView.setText(pref.getString("username", ""));
 
       if (pref.getString("gender", "M").equals("M")) {
          mProfilePicture.setImageDrawable(getDrawable(R.drawable.boy));
-      }
-      else {
+      } else {
          mProfilePicture.setImageDrawable(getDrawable(R.drawable.girl));
       }
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
                   return true;
 
                case R.id.logout:
-                  logout();
+                  showLogoutDialog();
                   return true;
 
                default:
@@ -125,10 +125,24 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
       actionBarDrawerToggle.syncState();
    }
 
+   private void showLogoutDialog() {
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_48dp)
+            .setTitle(R.string.logout_question).setCancelable(true).setPositiveButton(R.string.yes, new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            logout();
+         }
+      }).setNegativeButton(R.string.no, null)
+            .setTopColor(getResources()
+                  .getColor(R.color.colorPrimary)).show();
+   }
+
    private void logout() {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
       ed.putBoolean("loggedIn", false);
+      ed.putString("username", "");
       ed.apply();
       Intent loginIntent = new Intent(this, LoginActivity.class);
       startActivity(loginIntent);
@@ -138,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback{
       View view = getCurrentFocus();
 
       if (view != null) {
-         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
          imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
       }
    }

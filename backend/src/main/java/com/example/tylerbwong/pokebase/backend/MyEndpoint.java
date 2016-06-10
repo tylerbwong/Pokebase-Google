@@ -130,6 +130,12 @@ public class MyEndpoint {
             "GROUP BY T.id " +
             "HAVING COUNT(*) = 6)";
 
+    public static final String MAX_TEAM_ID =
+            "SELECT MAX(T.id) AS maxId FROM Teams T";
+
+    public static final String NEW_USER_TEAM =
+            "INSERT INTO UserTeams VALUES (?, ?)";
+
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
         instantiateDriver();
@@ -366,14 +372,38 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "newTeam")
-    public QueryResult newTeam(@Named("name") String name, @Named("description") String description) {
+    public QueryResult newTeam(@Named("username") String username,
+                               @Named("name") String name, @Named("description") String description) {
+        ResultSet resultSet;
+        int userId = 0;
+        int teamId = 0;
         instantiateDriver();
 
         try {
             Connection connection = DriverManager.getConnection(url);
-            PreparedStatement preparedStatement = connection.prepareStatement(NEW_TEAM);
+            PreparedStatement preparedStatement = connection.prepareStatement(USER_ID);
+            preparedStatement.setString(1, username);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                userId = resultSet.getInt("id");
+            }
+
+            preparedStatement = connection.prepareStatement(NEW_TEAM);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, description);
+            preparedStatement.executeUpdate();
+
+            preparedStatement = connection.prepareStatement(MAX_TEAM_ID);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                teamId = resultSet.getInt("maxId");
+            }
+
+            preparedStatement = connection.prepareStatement(NEW_USER_TEAM);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, teamId);
             preparedStatement.executeUpdate();
             connection.close();
         } catch (Exception e) {

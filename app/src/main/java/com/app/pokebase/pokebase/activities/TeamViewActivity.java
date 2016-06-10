@@ -2,8 +2,8 @@ package com.app.pokebase.pokebase.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,12 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.PokemonTeamMemberAdapter;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
-import com.github.fabtransitionactivity.SheetLayout;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
@@ -28,11 +29,10 @@ import java.util.ArrayList;
 /**
  * @author Tyler Wong
  */
-public class TeamViewActivity extends AppCompatActivity implements SheetLayout.OnFabAnimationEndListener {
+public class TeamViewActivity extends AppCompatActivity {
 
    private Toolbar mToolbar;
-   private SheetLayout mSheetLayout;
-   private FloatingActionButton mFab;
+   private RelativeLayout mLayout;
    private RecyclerView mPokemonList;
    private LinearLayout mEmptyView;
    private TextInputEditText mNameInput;
@@ -41,30 +41,17 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    private PokemonTeamMemberAdapter mPokemonAdapter;
    private ArrayList<PokemonTeamMember> mPokemon;
 
-   private final static int REQUEST_CODE = 1;
-
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_new_team);
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      mSheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
+      mLayout = (RelativeLayout) findViewById(R.id.layout);
       mPokemonList = (RecyclerView) findViewById(R.id.team_list);
-      mFab = (FloatingActionButton) findViewById(R.id.fab);
       mEmptyView = (LinearLayout) findViewById(R.id.empty_layout);
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
-
-      mFab.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            onFabClick();
-         }
-      });
-
-      mSheetLayout.setFab(mFab);
-      mSheetLayout.setFabAnimationEndListener(this);
 
       setSupportActionBar(mToolbar);
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -86,10 +73,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          mPokemonList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
       }
-   }
-
-   public void onFabClick() {
-      mSheetLayout.expandFab();
    }
 
    @Override
@@ -115,17 +98,18 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    }
 
    private void addTeam() {
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       String[] newTeam = new String[4];
       newTeam[0] = QueryTask.NEW_TEAM;
-      newTeam[1] = mNameInput.getText().toString();
-      newTeam[2] = mDescriptionInput.getText().toString();
+      newTeam[1] = pref.getString("username", "");
+      newTeam[2] = mNameInput.getText().toString();
+      newTeam[3] = mDescriptionInput.getText().toString();
       new QueryTask().execute(new Pair<Context, String[]>(this, newTeam));
-   }
 
-   @Override
-   public void onFabAnimationEnd() {
-      Intent intent = new Intent(this, MainActivity.class);
-      startActivityForResult(intent, REQUEST_CODE);
+      Toast.makeText(this, "Added new team " + mNameInput.getText().toString() + "!",
+            Toast.LENGTH_LONG).show();
+
+      backToMain();
    }
 
    private void showBackDialog() {
