@@ -142,11 +142,20 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
             if (strStuff.size() == 3) {
                 mTypeTwoView.setVisibility(View.GONE);
                 mTypeOneView.setText(strStuff.get(2));
+                String colorName = "type" + strStuff.get(2);
+                int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+                mTypeOneView.setBackgroundColor(getResources().getColor(colorResId));
             }
             else {
                 mTypeOneView.setText(strStuff.get(2));
+                String colorName = "type" + strStuff.get(2);
+                int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+                mTypeOneView.setBackgroundColor(getResources().getColor(colorResId));
                 mTypeTwoView.setVisibility(View.VISIBLE);
                 mTypeTwoView.setText(strStuff.get(3));
+                colorName = "type" + strStuff.get(3);
+                colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+                mTypeTwoView.setBackgroundColor(getResources().getColor(colorResId));
             }
         }
     }
