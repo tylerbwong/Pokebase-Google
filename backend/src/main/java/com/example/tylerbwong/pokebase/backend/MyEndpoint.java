@@ -116,6 +116,20 @@ public class MyEndpoint {
     private final static String UPDATE_TEAM =
             "UPDATE Teams SET name = ?, SET description = ? WHERE id = ?";
 
+    public static final String TEAM_NAMES_BY_USER = "SELECT T.id, T.name FROM Teams T " +
+            "JOIN UserTeams E ON E.teamId = T.id " +
+            "JOIN Users U ON U.id = E.userId " +
+            "WHERE U.name = ? " +
+            "AND T.id != ALL " +
+            "(SELECT T.id " +
+            "FROM Teams T " +
+            "JOIN UserTeams E ON E.teamId = T.id " +
+            "JOIN Users U ON U.id = E.userId " +
+            "JOIN TeamPokemon X ON X.teamId = T.id " +
+            "WHERE U.name = ? " +
+            "GROUP BY T.id " +
+            "HAVING COUNT(*) = 6)";
+
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
         instantiateDriver();
@@ -399,6 +413,32 @@ public class MyEndpoint {
         }
 
         return new CheckResult(QueryResult.UPDATE_TEAM, true);
+    }
+
+    @ApiMethod(name = "queryTeamNames")
+    public QueryResult queryTeamNames(@Named("name") String name) {
+        instantiateDriver();
+
+        List<Integer> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(TEAM_NAMES_BY_USER);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("id"));
+                names.add(resultSet.getString("name"));
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ids.add(0);
+            names.add(e.getMessage());
+        }
+
+        return new TeamNameResult(ids, names);
     }
 
     @ApiMethod(name = "queryAllTeams")

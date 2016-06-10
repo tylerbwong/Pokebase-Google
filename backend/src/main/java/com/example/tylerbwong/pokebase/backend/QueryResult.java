@@ -25,6 +25,7 @@ public abstract class QueryResult {
     public static final String ALL_TYPES_REGIONS = "all_types_and_regions";
     public static final String ALL_TEAMS = "all_teams";
     public static final String TEAM_BY_ID = "team_by_id";
+    public static final String TEAM_NAMES = "team_names";
     public List<String> getStringInfo() {
         return null;
     }
