@@ -13,7 +13,9 @@
     <string name="go_back">Go Back</string>
     <string name="submit">Submit</string>
     <string name="search">Search</string>
+    <string name="add">Add</string>
     <string name="login_title">What was your\nname again?</string>
+    <string name="add_team_title">Choose a team to add to!</string>
 
     <!-- VALUES -->
     <string name="logo_transition">Logo transition</string>

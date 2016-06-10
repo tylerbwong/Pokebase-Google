@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +19,7 @@ import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
 import com.app.pokebase.pokebase.utilities.Typefaces;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /**
  * @author Tyler Wong
@@ -90,8 +90,7 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
 
             if (s.toString().trim().length() == 0) {
                mHasText = false;
-            }
-            else {
+            } else {
                mHasText = true;
             }
             checkFields();
@@ -112,8 +111,7 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
    public String getUsername() {
       if (mHasText) {
          mUsername = mNameInput.getText().toString();
-      }
-      else {
+      } else {
          mUsername = DEFAULT_NAME;
       }
       return mUsername;
@@ -122,8 +120,7 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
    private void checkFields() {
       if (mHasText) {
          mCreateButton.setEnabled(true);
-      }
-      else {
+      } else {
          mCreateButton.setEnabled(false);
       }
    }
@@ -158,18 +155,17 @@ public class SignUpActivity extends AppCompatActivity implements ApiCallback {
          Intent genderIntent = new Intent(this, GenderActivity.class);
          genderIntent.putExtra("username", mNameInput.getText().toString());
          startActivity(genderIntent);
-      }
-      else {
+      } else {
          showUsedUsernameDialog();
       }
    }
 
    private void showUsedUsernameDialog() {
-      new AlertDialog.Builder(SignUpActivity.this)
-            .setIcon(R.drawable.info)
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_48dp)
             .setTitle(R.string.taken)
-            .setMessage(R.string.new_name)
-            .setPositiveButton(R.string.yes, null)
-            .show();
+            .setMessage(R.string.new_name).setCancelable(true).setPositiveButton(R.string.ok, null)
+            .setTopColor(getResources()
+            .getColor(R.color.colorPrimary)).show();
    }
 }

@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ import com.app.pokebase.pokebase.adapters.TextViewAdapter;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
+import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import java.util.List;
 
@@ -75,15 +78,12 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-
     }
 
-    private void setHeightViewText(int decimeters)
-    {
+    private void setHeightViewText(int decimeters) {
         int feet = (int) Math.floor(decimeters * FT_PER_DM);
         int inches = (int) Math.round((decimeters * FT_PER_DM - feet) * IN_PER_FT);
-        if (inches == IN_PER_FT)
-        {
+        if (inches == IN_PER_FT) {
             feet++;
             inches = 0;
         }
@@ -93,8 +93,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         mHeightView.setText(heightText);
     }
 
-    private void setWeightViewText(int hectograms)
-    {
+    private void setWeightViewText(int hectograms) {
         double pounds = hectograms * LB_PER_HG;
         double kilograms = (double) hectograms / KG_PER_HG;
         String weightText = String.format("%.1f", pounds) + " lbs (" +
@@ -104,10 +103,9 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                onBackPressed();
+        switch (item.getItemId()) {
+            case R.id.add_action:
+                showAddTeamDialog();
                 break;
             default:
                 break;
@@ -115,14 +113,38 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         return true;
     }
 
-    public void showEvolutions(View view)
-    {
+    public void showEvolutions(View view) {
         Intent evolutionsIntent = new Intent(this, EvolutionsActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(POKEMON_ID_KEY, mPokemonId);
         extras.putString(POKEMON_NAME_KEY, mPokemonName);
         evolutionsIntent.putExtras(extras);
         startActivity(evolutionsIntent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_add, menu);
+        return true;
+    }
+
+    private void showAddTeamDialog() {
+        String[] teams = new String[3];
+        teams[0] = "hello";
+        teams[1] = "goodbye";
+        teams[2] = "what's up";
+        new LovelyChoiceDialog(this)
+              .setTopColorRes(R.color.colorPrimary)
+              .setTitle(R.string.add_team_title)
+              .setIcon(R.drawable.ic_add_circle_outline_white_36dp)
+              .setItems(teams, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                  @Override
+                  public void onItemSelected(int position, String item) {
+
+                  }
+              })
+              .show();
     }
 
     @Override
