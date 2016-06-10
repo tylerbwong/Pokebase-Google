@@ -60,6 +60,11 @@ public class TeamViewActivity extends AppCompatActivity {
 
       mPokemon = new ArrayList<>();
 
+      mPokemon.add(new PokemonTeamMember(0));
+      mPokemon.add(new PokemonTeamMember(0));
+      mPokemon.add(new PokemonTeamMember(0));
+      mPokemon.add(new PokemonTeamMember(0));
+
       LinearLayoutManager llm = new LinearLayoutManager(this);
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mPokemonList.setLayoutManager(llm);

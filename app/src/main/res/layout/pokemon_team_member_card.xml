@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/pokemon"
-            android:text="@string/pokebase"
+            android:text="@string/oddish"
             android:textSize="18sp"/>
 
         <TextView

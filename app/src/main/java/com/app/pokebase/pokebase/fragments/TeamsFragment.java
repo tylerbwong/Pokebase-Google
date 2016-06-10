@@ -129,8 +129,8 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          if (teamIds != null) {
             for (int i = 0; i < teamIds.size(); i++) {
                List<PokemonTeamMember> members = new ArrayList<>();
-               if (pokemonIds != null) {
-                  List<Integer> teamPokemon = pokemonIds.get(i);
+               if (pokemonIds != null && pokemonIds.size()  > 0) {
+                  List<Integer> teamPokemon = pokemonIds.remove(0);
 
                   for (Integer pokemon : teamPokemon) {
                      members.add(new PokemonTeamMember(pokemon));

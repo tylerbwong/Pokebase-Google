@@ -1,5 +1,6 @@
 package com.app.pokebase.pokebase.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.TextViewSpinnerAdapter;
@@ -52,16 +54,16 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
 
 
         String[] moves = new String[10];
-        moves[0] = "blah blah";
-        moves[1] = "hello";
-        moves[2] = "eevee";
-        moves[3] = "shaymin";
-        moves[4] = "blah blah";
-        moves[5] = "blah blah";
-        moves[6] = "hello";
-        moves[7] = "eevee";
-        moves[8] = "shaymin";
-        moves[9] = "blah blah";
+        moves[0] = "Solar Beam";
+        moves[1] = "Spore";
+        moves[2] = "Poison Powder";
+        moves[3] = "Tackle";
+        moves[4] = "Growl";
+        moves[5] = "Synthesis";
+        moves[6] = "Absorb";
+        moves[7] = "Hyper Beam";
+        moves[8] = "Dragonbreath";
+        moves[9] = "Cut";
 
         String[] levels = new String[MAX_LEVEL];
         for (int lvl = MIN_LEVEL; lvl < levels.length; lvl++) {
@@ -89,12 +91,20 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
                 onBackPressed();
                 break;
             case R.id.submit_action:
-                //UPDATE database
+                Toast.makeText(this, "Updated Pokémon!",
+                      Toast.LENGTH_LONG).show();
+
+                backToTeamView();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void backToTeamView() {
+        Intent teamIntent = new Intent(this, TeamViewActivity.class);
+        startActivity(teamIntent);
     }
 
     @Override
