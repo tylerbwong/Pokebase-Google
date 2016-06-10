@@ -9,10 +9,12 @@ public class CheckResult extends QueryResult{
     private String mType;
     public CheckResult(String type, boolean result) {
         this.mResult = result;
+        this.mType = type;
     }
     public CheckResult(String type, boolean result, int count) {
         this.mResult = result;
         this.mCount = count;
+        this.mType = type;
     }
     @Override
     public boolean getBoolean() {

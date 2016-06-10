@@ -98,8 +98,9 @@ public class MyEndpoint {
     private final static String ALL_TEAM_POKEMON =
             "SELECT T.id, K.pokemonId " +
                     "FROM Teams T " +
+                    "JOIN UserTeams M ON T.id = M.teamId " +
                     "JOIN Users U ON U.id = M.userId " +
-                    "JOIN TeamPokemon K ON K.teamId = T.id" +
+                    "JOIN TeamPokemon K ON K.teamId = T.id " +
                     "WHERE U.name = ? " +
                     "ORDER BY T.id";
     private final static String POKEMON_BY_TEAM =
@@ -116,7 +117,7 @@ public class MyEndpoint {
     private final static String UPDATE_TEAM =
             "UPDATE Teams SET name = ?, SET description = ? WHERE id = ?";
 
-    public static final String TEAM_NAMES_BY_USER = "SELECT T.id, T.name FROM Teams T " +
+    private static final String TEAM_NAMES_BY_USER = "SELECT T.id, T.name FROM Teams T " +
             "JOIN UserTeams E ON E.teamId = T.id " +
             "JOIN Users U ON U.id = E.userId " +
             "WHERE U.name = ? " +
@@ -130,11 +131,14 @@ public class MyEndpoint {
             "GROUP BY T.id " +
             "HAVING COUNT(*) = 6)";
 
-    public static final String MAX_TEAM_ID =
+    private static final String MAX_TEAM_ID =
             "SELECT MAX(T.id) AS maxId FROM Teams T";
 
-    public static final String NEW_USER_TEAM =
+    private static final String NEW_USER_TEAM =
             "INSERT INTO UserTeams VALUES (?, ?)";
+
+    private static final String NEW_POKEMON_TEAM =
+            "INSERT INTO TeamPokemon Values (0, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
@@ -414,15 +418,31 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "newPokemonTeam")
-    public QueryResult newPokemonTeam(@Named("userId") int userId, @Named("teamId") int teamId,
-                                      @Named("pokemonId") int pokemonId) {
+    public QueryResult newPokemonTeam(@Named("teamId") int teamId, @Named("pokemonId") int pokemonId,
+                                      @Named("nickname") String nickname, @Named("level") int level,
+                                      @Named("moveOne") String moveOne, @Named("moveTwo") String moveTwo,
+                                      @Named("moveThree") String moveThree, @Named("moveFour") String moveFour) {
 
-        //QUERY THE NAME OF THE POKEMON
+        instantiateDriver();
+        String str = "";
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(NEW_POKEMON_TEAM);
+            preparedStatement.setInt(1, teamId);
+            preparedStatement.setInt(2, pokemonId);
+            preparedStatement.setString(3, nickname);
+            preparedStatement.setInt(4, level);
+            preparedStatement.setString(5, moveOne);
+            preparedStatement.setString(6, moveTwo);
+            preparedStatement.setString(7, moveThree);
+            preparedStatement.setString(8, moveFour);
+            preparedStatement.executeUpdate();
+            connection.close();
+        } catch (Exception e) {
+            str = e.getMessage();
+        }
 
-        //INSERT INTO TeamPokemon
-        //VALUES (teamId?), (pokemonId?), (POKEMON NAME), (1), (null), (null), (null), (null)
-
-        return new CheckResult(QueryResult.NEW_POKEMON_ON_TEAM, true);
+        return new CheckResult(str, true);
     }
 
     @ApiMethod(name = "updateTeam")

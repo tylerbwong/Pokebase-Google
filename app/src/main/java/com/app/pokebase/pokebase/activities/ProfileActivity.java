@@ -141,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         return true;
     }
 
-    private void showAddToTeamDialog(String[] teams, List<Integer> teamIds) {
+    private void showAddToTeamDialog(String[] teams, final List<Integer> teamIds) {
         new LovelyChoiceDialog(this)
               .setTopColorRes(R.color.colorPrimary)
               .setTitle("Choose a team to add " + mPokemonName + " to!")
@@ -149,6 +149,17 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
               .setItems(teams, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
                   @Override
                   public void onItemSelected(int position, String item) {
+                      String[] pokemon = new String[9];
+                      pokemon[0] = QueryTask.NEW_POKEMON_ON_TEAM;
+                      pokemon[1] = String.valueOf(teamIds.get(position));
+                      pokemon[2] = String.valueOf(mPokemonId);
+                      pokemon[3] = mPokemonName;
+                      pokemon[4] = String.valueOf(1);
+                      pokemon[5] = "";
+                      pokemon[6] = "";
+                      pokemon[7] = "";
+                      pokemon[8] = "";
+                      new QueryTask().execute(new Pair<Context, String[]>(ProfileActivity.this, pokemon));
                       Snackbar snackbar = Snackbar
                             .make(mLayout, "Added " + mPokemonName + " to " + item, Snackbar.LENGTH_LONG);
                       snackbar.show();
@@ -159,49 +170,49 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
 
     @Override
     public void onApiCallback(QueryResult result) {
-        if (result.getType().equals(QueryTask.SELECTED_POKEMON)) {
-            List<Integer> intStuff = result.getIntInfo();
-            List<String> strStuff = result.getStringInfo();
-            List<String> moves = result.getMoreStringInfo();
-            mMovesList.setAdapter(new TextViewAdapter(this, moves.toArray(new String[moves.size()])));
+        if (result != null) {
+            if (result.getType().equals(QueryTask.SELECTED_POKEMON)) {
+                List<Integer> intStuff = result.getIntInfo();
+                List<String> strStuff = result.getStringInfo();
+                List<String> moves = result.getMoreStringInfo();
+                mMovesList.setAdapter(new TextViewAdapter(this, moves.toArray(new String[moves.size()])));
 
-            mPokemonId = intStuff.get(0);
-            mIdView.setText(String.valueOf(intStuff.get(0)));
-            String idValue = String.valueOf(intStuff.get(0));
-            int imageResourceId = this.getResources().getIdentifier("sprites_" + idValue, "drawable", this.getPackageName());
-            mProfileImg.setImageResource(imageResourceId);
+                mPokemonId = intStuff.get(0);
+                mIdView.setText(String.valueOf(intStuff.get(0)));
+                String idValue = String.valueOf(intStuff.get(0));
+                int imageResourceId = this.getResources().getIdentifier("sprites_" + idValue, "drawable", this.getPackageName());
+                mProfileImg.setImageResource(imageResourceId);
 
-            setHeightViewText(intStuff.get(1));
-            setWeightViewText(intStuff.get(2));
-            mExpView.setText(String.valueOf(intStuff.get(3)));
+                setHeightViewText(intStuff.get(1));
+                setWeightViewText(intStuff.get(2));
+                mExpView.setText(String.valueOf(intStuff.get(3)));
 
-            mPokemonName = strStuff.get(0);
-            mActionBar.setTitle(strStuff.get(0));
-            mNameView.setText(strStuff.get(0));
-            mRegionView.setText(strStuff.get(1));
-            //IF there is only one type
-            if (strStuff.size() == 3) {
-                mTypeTwoView.setVisibility(View.GONE);
-                mTypeOneView.setText(strStuff.get(2));
-                String colorName = "type" + strStuff.get(2);
-                int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
-                mTypeOneView.setBackgroundColor(getResources().getColor(colorResId));
+                mPokemonName = strStuff.get(0);
+                mActionBar.setTitle(strStuff.get(0));
+                mNameView.setText(strStuff.get(0));
+                mRegionView.setText(strStuff.get(1));
+                //IF there is only one type
+                if (strStuff.size() == 3) {
+                    mTypeTwoView.setVisibility(View.GONE);
+                    mTypeOneView.setText(strStuff.get(2));
+                    String colorName = "type" + strStuff.get(2);
+                    int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+                    mTypeOneView.setBackgroundColor(getResources().getColor(colorResId));
+                } else {
+                    mTypeOneView.setText(strStuff.get(2));
+                    String colorName = "type" + strStuff.get(2);
+                    int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+                    mTypeOneView.setBackgroundColor(getResources().getColor(colorResId));
+                    mTypeTwoView.setVisibility(View.VISIBLE);
+                    mTypeTwoView.setText(strStuff.get(3));
+                    colorName = "type" + strStuff.get(3);
+                    colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+                    mTypeTwoView.setBackgroundColor(getResources().getColor(colorResId));
+                }
+            } else if (result.getType().equals(QueryTask.TEAM_NAMES)) {
+                List<String> names = result.getStringInfo();
+                showAddToTeamDialog(names.toArray(new String[names.size()]), result.getIntInfo());
             }
-            else {
-                mTypeOneView.setText(strStuff.get(2));
-                String colorName = "type" + strStuff.get(2);
-                int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
-                mTypeOneView.setBackgroundColor(getResources().getColor(colorResId));
-                mTypeTwoView.setVisibility(View.VISIBLE);
-                mTypeTwoView.setText(strStuff.get(3));
-                colorName = "type" + strStuff.get(3);
-                colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
-                mTypeTwoView.setBackgroundColor(getResources().getColor(colorResId));
-            }
-        }
-        else if (result.getType().equals(QueryTask.TEAM_NAMES)) {
-            List<String> names = result.getStringInfo();
-            showAddToTeamDialog(names.toArray(new String[names.size()]), result.getIntInfo());
         }
     }
 }
