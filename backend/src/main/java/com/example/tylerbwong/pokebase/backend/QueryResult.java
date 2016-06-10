@@ -23,6 +23,7 @@ public abstract class QueryResult {
     public static final String DELETE_POKEMON = "delete_pokemon";
     public static final String DELETE_TEAM = "delete_team";
     public static final String ALL_TYPES_REGIONS = "all_types_and_regions";
+    public static final String ALL_TEAMS = "all_teams";
     public List<String> getStringInfo() {
         return null;
     }
@@ -40,5 +41,8 @@ public abstract class QueryResult {
     }
     public int getCount() {
         return 0;
+    }
+    public List<List<Integer>> getListOfLists() {
+        return null;
     }
 }

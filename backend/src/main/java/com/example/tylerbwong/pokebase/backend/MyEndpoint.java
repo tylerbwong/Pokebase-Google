@@ -88,6 +88,20 @@ public class MyEndpoint {
                     "JOIN PokemonEvolutions E ON E.evolvesFrom = P.id " +
                     "JOIN Pokemon K ON E.id = K.id " +
                     "WHERE P.id = ?";
+    private final static String ALL_TEAM_INFO =
+            "SELECT T.id, T.name, T.description " +
+                    "FROM Teams T " +
+                    "JOIN UserTeams M ON T.id = M.teamId " +
+                    "JOIN Users U ON U.id = M.userId " +
+                    "WHERE U.name = ? " +
+                    "ORDER BY T.id";
+    private final static String ALL_TEAM_POKEMON =
+            "SELECT T.id, P.pokemonId " +
+                    "FROM Teams T " +
+                    "JOIN Users U ON U.id = M.userId " +
+                    "JOIN TeamPokemon K ON K.teamId = T.id" +
+                    "WHERE U.name = ? " +
+                    "ORDER BY T.id";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
@@ -372,18 +386,54 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "queryAllTeams")
-    public QueryResult queryAllTeams(@Named("userId") int userId) {
-        //QUERY ALL TEAMS
+    public QueryResult queryAllTeams(@Named("userName") String userName) {
+        instantiateDriver();
 
-        //SELECT *
-        //FROM Users U
-        //JOIN UserTeams UT ON U.id = UT.userId
-        //JOIN Teams T ON UT.teamId = T.id
-        //JOIN TeamPokemon TP ON TP.teamId = T.id
-        //JOIN Pokemon P ON P.id = TP.pokemonId
-        //WHERE U.id = (userId ?)
+        List<Integer> teamIds = new ArrayList<>();
+        List<String> teamNames = new ArrayList<>();
+        List<String> teamDescriptions = new ArrayList<>();
+        List<List<Integer>> pokemon = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(ALL_TEAM_INFO);
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                teamIds.add(resultSet.getInt("id"));
+                teamNames.add(resultSet.getString("name"));
+                teamDescriptions.add(resultSet.getString("description"));
+            }
+            preparedStatement = connection.prepareStatement(ALL_TEAM_POKEMON);
+            preparedStatement.setString(1, userName);
+            resultSet = preparedStatement.executeQuery();
 
-        return null; //new TeamListResult();
+            for (int i = 0; i < teamIds.size(); i++) {
+                pokemon.add(new ArrayList<Integer>());
+            }
+
+            int teamI = 0;
+            while (resultSet.next()) {
+                int teamId = resultSet.getInt("id");
+                int pokemonId = resultSet.getInt("pokemonId");
+                boolean foundTeam = false;
+
+                while (!foundTeam) {
+                    if (teamIds.get(teamI) == teamId) {
+                        foundTeam = true;
+                        pokemon.get(teamI).add(pokemonId);
+                    }
+                    else {
+                        teamI++;
+                    }
+                }
+            }
+
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            teamNames.add(e.getMessage());
+        }
+        return new PokemonTeamResult(teamIds, teamNames, teamDescriptions, pokemon);
     }
 
     @ApiMethod(name = "deleteTeam")
