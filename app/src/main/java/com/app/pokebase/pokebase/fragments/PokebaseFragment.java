@@ -38,6 +38,7 @@ public class PokebaseFragment extends Fragment implements ApiCallback, AdapterVi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTheme(R.style.PokemonEditorTheme);
         mCurrentTasks = new ArrayList<>();
         String[] typeRegionCommand = new String[1];
         typeRegionCommand[0] = QueryTask.ALL_TYPES_REGIONS;
