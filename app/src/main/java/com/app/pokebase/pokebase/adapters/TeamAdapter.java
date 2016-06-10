@@ -1,28 +1,32 @@
 package com.app.pokebase.pokebase.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
 import com.app.pokebase.pokebase.components.Team;
+import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tyler Wong
  */
 public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
-   private ArrayList<Team> mTeams;
+   private List<Team> mTeams;
+   private Context mContext;
 
-   public TeamAdapter(ArrayList<Team> teams) {
+   public TeamAdapter(Context context, ArrayList<Team> teams) {
+      this.mContext = context;
       this.mTeams = teams;
    }
 
-   public ArrayList<Team> getTeams() {
+   public List<Team> getTeams() {
       return mTeams;
    }
 
@@ -39,8 +43,15 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
    @Override
    public void onBindViewHolder(final TeamCardViewHolder holder, int position) {
       Team curTeam = mTeams.get(position);
-      holder.mTitleLabel.setText(curTeam.getName());
-      //holder.mPokemonOne.setImageDrawable(c);
+      holder.mTitleLabel.setText(curTeam.mName);
+      holder.mDescription.setText(curTeam.mDescription);
+      int teamSize = curTeam.mTeam.size();
+
+      for (int i = 0; i < teamSize; i++) {
+         holder.pokemonList.get(i).setImageResource(mContext.getResources()
+                 .getIdentifier("icon_" + curTeam.mTeam.get(i).mPokemonId,
+                         "drawable", mContext.getPackageName()));
+      }
    }
 
    @Override

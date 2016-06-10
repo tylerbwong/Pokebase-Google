@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
 
       mNavigationView.getMenu().getItem(0).setChecked(true);
       TeamsFragment eventsFragment = new TeamsFragment();
+      mCurrentFragment = eventsFragment;
       fragmentTransaction = getSupportFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.frame, eventsFragment);
       fragmentTransaction.commit();
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
             switch (menuItem.getItemId()) {
                case R.id.teams:
                   TeamsFragment eventsFragment = new TeamsFragment();
+                  mCurrentFragment = eventsFragment;
                   fragmentTransaction = getSupportFragmentManager().beginTransaction();
                   fragmentTransaction.replace(R.id.frame, eventsFragment);
                   fragmentTransaction.commit();

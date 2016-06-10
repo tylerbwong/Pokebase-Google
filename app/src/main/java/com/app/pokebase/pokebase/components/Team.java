@@ -1,38 +1,20 @@
 package com.app.pokebase.pokebase.components;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tyler Wong
  */
 public class Team {
-   private String mName;
-   private String mDescription;
-   private ArrayList<PokemonTeamMember> mTeam;
+   public final int mId;
+   public final String mName;
+   public final String mDescription;
+   public final List<PokemonTeamMember> mTeam;
 
-   public Team(String name, String description, ArrayList<PokemonTeamMember> team) {
+   public Team(int id, String name, String description, List<PokemonTeamMember> team) {
+      this.mId = id;
       this.mName = name;
       this.mDescription = description;
       this.mTeam = team;
-   }
-
-   public void setName(String name) {
-      this.mName = name;
-   }
-
-   public String getName() {
-      return mName;
-   }
-
-   public void addPokemon(PokemonTeamMember pokemon) {
-      mTeam.add(pokemon);
-   }
-
-   public void removePokemon(int index) {
-      mTeam.remove(index);
-   }
-
-   public ArrayList<PokemonTeamMember> getTeam() {
-      return mTeam;
    }
 }

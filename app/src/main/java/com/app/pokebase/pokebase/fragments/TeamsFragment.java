@@ -1,6 +1,8 @@
 package com.app.pokebase.pokebase.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +20,20 @@ import android.widget.LinearLayout;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.TeamViewActivity;
 import com.app.pokebase.pokebase.adapters.TeamAdapter;
+import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.components.Team;
+import com.app.pokebase.pokebase.interfaces.ApiCallback;
+import com.app.pokebase.pokebase.querytasks.QueryTask;
+import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tyler Wong
  */
-public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimationEndListener {
+public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimationEndListener, ApiCallback {
 
    private SheetLayout mSheetLayout;
    private FloatingActionButton mFab;
@@ -67,7 +75,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       LinearLayoutManager llm = new LinearLayoutManager(getContext());
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mTeamList.setLayoutManager(llm);
-      mTeamAdapter = new TeamAdapter(mTeams);
+      mTeamAdapter = new TeamAdapter(getContext(), mTeams);
       mTeamList.setAdapter(mTeamAdapter);
 
       if (mTeams.isEmpty()) {
@@ -79,6 +87,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          mEmptyView.setVisibility(View.GONE);
       }
 
+      loadTeams();
       return v;
    }
 
@@ -97,6 +106,52 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       super.onActivityResult(requestCode, resultCode, data);
       if(requestCode == REQUEST_CODE){
          mSheetLayout.contractFab();
+      }
+   }
+
+   public void loadTeams() {
+      SharedPreferences pref = getActivity().getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      String[] loadTeams = new String[2];
+      loadTeams[0] = QueryTask.ALL_TEAMS;
+      loadTeams[1] = pref.getString("username", "");
+      new QueryTask().execute(new Pair<Context, String[]>(getActivity(), loadTeams));
+   }
+
+   @Override
+   public void onApiCallback(QueryResult result) {
+      if (result.getType().equals(QueryTask.ALL_TEAMS)) {
+         List<String> names = result.getStringInfo();
+         List<String> descriptions = result.getMoreStringInfo();
+         List<List<Integer>> pokemonIds = result.getListOfLists();
+         List<Integer> teamIds = result.getIntInfo();
+
+         mTeams = new ArrayList<>();
+         if (teamIds != null) {
+            for (int i = 0; i < teamIds.size(); i++) {
+               List<PokemonTeamMember> members = new ArrayList<>();
+               if (pokemonIds != null) {
+                  List<Integer> teamPokemon = pokemonIds.get(i);
+
+                  for (Integer pokemon : teamPokemon) {
+                     members.add(new PokemonTeamMember(pokemon));
+                  }
+               }
+               Team newTeam = new Team(teamIds.get(i), names.get(i), descriptions.get(i), members);
+               mTeams.add(newTeam);
+            }
+         }
+
+         mTeamAdapter = new TeamAdapter(getContext(), mTeams);
+         mTeamList.setAdapter(mTeamAdapter);
+
+         if (mTeams.isEmpty()) {
+            mTeamList.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+         }
+         else {
+            mTeamList.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
+         }
       }
    }
 }

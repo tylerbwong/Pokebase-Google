@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.activities.PokemonEditorActivity;
 import com.app.pokebase.pokebase.activities.TeamViewActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tyler Wong
@@ -24,6 +26,8 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
    public ImageView mPokemonFour;
    public ImageView mPokemonFive;
    public ImageView mPokemonSix;
+
+   public List<ImageView> pokemonList;
 
    public TeamCardViewHolder(View itemView) {
       super(itemView);
@@ -45,5 +49,14 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
       mPokemonFour = (ImageView) itemView.findViewById(R.id.pokemon_4);
       mPokemonFive = (ImageView) itemView.findViewById(R.id.pokemon_5);
       mPokemonSix = (ImageView) itemView.findViewById(R.id.pokemon_6);
+
+      pokemonList = new ArrayList<>();
+
+      pokemonList.add(mPokemonOne);
+      pokemonList.add(mPokemonTwo);
+      pokemonList.add(mPokemonThree);
+      pokemonList.add(mPokemonFour);
+      pokemonList.add(mPokemonFive);
+      pokemonList.add(mPokemonSix);
    }
 }
