@@ -2,6 +2,7 @@ package com.app.pokebase.pokebase.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -112,7 +113,11 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
                 onBackPressed();
                 break;
             case R.id.add_action:
-                showAddToTeamDialog();
+                SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+                String[] teamArray = new String[2];
+                teamArray[0] = QueryTask.TEAM_NAMES;
+                teamArray[1] = pref.getString("username", "");
+                new QueryTask().execute(new Pair<Context, String[]>(this, teamArray));
                 break;
             default:
                 break;
@@ -136,11 +141,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
         return true;
     }
 
-    private void showAddToTeamDialog() {
-        String[] teams = new String[3];
-        teams[0] = "hello";
-        teams[1] = "goodbye";
-        teams[2] = "what's up";
+    private void showAddToTeamDialog(String[] teams, List<Integer> teamIds) {
         new LovelyChoiceDialog(this)
               .setTopColorRes(R.color.colorPrimary)
               .setTitle("Choose a team to add " + mPokemonName + " to!")
@@ -197,6 +198,10 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
                 colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
                 mTypeTwoView.setBackgroundColor(getResources().getColor(colorResId));
             }
+        }
+        else if (result.getType().equals(QueryTask.TEAM_NAMES)) {
+            List<String> names = result.getStringInfo();
+            showAddToTeamDialog(names.toArray(new String[names.size()]), result.getIntInfo());
         }
     }
 }
