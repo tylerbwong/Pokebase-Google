@@ -24,7 +24,6 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
     public static final String POKEMON_BY_TYPE_AND_REGION = "by_type_and_region";
     public static final String SELECTED_POKEMON = "selected";
     public static final String SELECTED_POKEMON_EVOLUTIONS = "selected_evolutions";
-    public static final String POKEMON_BY_NAME = "by_name";
     public static final String CHECK_USERNAME = "check_username";
     public static final String NEW_USER = "new_user";
     public static final String NEW_TEAM = "new_team";
@@ -67,7 +66,7 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
                 case SELECTED_POKEMON:
                     return myApiService.querySelected(Integer.valueOf(queryList.get(1))).execute();
                 case SELECTED_POKEMON_EVOLUTIONS:
-                case POKEMON_BY_NAME:
+                    return myApiService.queryEvolutions(Integer.valueOf(queryList.get(1))).execute();
                 case CHECK_USERNAME:
                     return myApiService.queryCheckUser(queryList.get(1)).execute();
                 case NEW_USER:

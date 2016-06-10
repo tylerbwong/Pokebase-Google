@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class ProfileActivity extends AppCompatActivity implements ApiCallback{
     public static final String POKEMON_ID_KEY = "pokemon_id";
+    public static final String POKEMON_NAME_KEY = "pokemon_name";
     private static final double FT_PER_DM = 0.32808399;
     private static final double LB_PER_HG = 0.22046226218;
     private static final int KG_PER_HG = 10;
@@ -115,6 +116,9 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
     public void showEvolutions(View view)
     {
         Intent evolutionsIntent = new Intent(this, EvolutionsActivity.class);
+        Bundle extras = new Bundle();
+        extras.putInt(POKEMON_ID_KEY, Integer.valueOf(mIdView.getText().toString()));
+        extras.putString(POKEMON_NAME_KEY, mNameView.getText().toString());
         startActivity(evolutionsIntent);
     }
 
