@@ -33,6 +33,8 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
     private static final int IN_PER_FT = 12;
     private static final int DM_PER_M = 10;
     private static final int PROFILE_IMG_ELEVATION = 40;
+    private int mPokemonId;
+    private String mPokemonName;
     private Toolbar mToolbar;
     private ImageView mProfileImg;
     private TextView mIdView;
@@ -117,8 +119,9 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
     {
         Intent evolutionsIntent = new Intent(this, EvolutionsActivity.class);
         Bundle extras = new Bundle();
-        extras.putInt(POKEMON_ID_KEY, Integer.valueOf(mIdView.getText().toString()));
-        extras.putString(POKEMON_NAME_KEY, mNameView.getText().toString());
+        extras.putInt(POKEMON_ID_KEY, mPokemonId);
+        extras.putString(POKEMON_NAME_KEY, mPokemonName);
+        evolutionsIntent.putExtras(extras);
         startActivity(evolutionsIntent);
     }
 
@@ -130,6 +133,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
             List<String> moves = result.getMoreStringInfo();
             mMovesList.setAdapter(new TextViewAdapter(this, moves.toArray(new String[moves.size()])));
 
+            mPokemonId = intStuff.get(0);
             mIdView.setText(String.valueOf(intStuff.get(0)));
             String idValue = String.valueOf(intStuff.get(0));
             int imageResourceId = this.getResources().getIdentifier("sprites_" + idValue, "drawable", this.getPackageName());
@@ -139,6 +143,7 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
             setWeightViewText(intStuff.get(2));
             mExpView.setText(String.valueOf(intStuff.get(3)));
 
+            mPokemonName = strStuff.get(0);
             mActionBar.setTitle(strStuff.get(0));
             mNameView.setText(strStuff.get(0));
             mRegionView.setText(strStuff.get(1));
