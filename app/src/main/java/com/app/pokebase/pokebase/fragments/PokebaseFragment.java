@@ -71,9 +71,9 @@ public class PokebaseFragment extends Fragment implements ApiCallback {
         switch(command) {
             case QueryTask.ALL_TYPES_REGIONS:
                 List<String> types = result.getStringInfo();
-                types.add(0,"-- Types");
-                List<String> regions = result.getStringInfo();
-                regions.add(0, "-- Regions");
+                types.add(0,"Types");
+                List<String> regions = result.getMoreStringInfo();
+                regions.add(0, "Regions");
                 mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), types.toArray(new String[types.size()])));
                 mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), regions.toArray(new String[types.size()])));
                 break;

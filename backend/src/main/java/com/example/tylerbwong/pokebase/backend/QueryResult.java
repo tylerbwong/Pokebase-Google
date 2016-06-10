@@ -25,6 +25,9 @@ public abstract class QueryResult {
     public List<String> getStringInfo() {
         return null;
     }
+    public List<String> getMoreStringInfo() {
+        return null;
+    }
     public List<Integer> getIntInfo() {
         return null;
     }
