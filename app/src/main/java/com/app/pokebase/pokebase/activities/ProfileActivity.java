@@ -155,10 +155,10 @@ public class ProfileActivity extends AppCompatActivity implements ApiCallback{
                       pokemon[2] = String.valueOf(mPokemonId);
                       pokemon[3] = mPokemonName;
                       pokemon[4] = String.valueOf(1);
-                      pokemon[5] = "";
-                      pokemon[6] = "";
-                      pokemon[7] = "";
-                      pokemon[8] = "";
+                      pokemon[5] = String.valueOf(0);
+                      pokemon[6] = String.valueOf(0);
+                      pokemon[7] = String.valueOf(0);
+                      pokemon[8] = String.valueOf(0);
                       new QueryTask().execute(new Pair<Context, String[]>(ProfileActivity.this, pokemon));
                       Snackbar snackbar = Snackbar
                             .make(mLayout, "Added " + mPokemonName + " to " + item, Snackbar.LENGTH_LONG);

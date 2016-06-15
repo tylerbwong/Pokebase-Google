@@ -420,11 +420,10 @@ public class MyEndpoint {
     @ApiMethod(name = "newPokemonTeam")
     public QueryResult newPokemonTeam(@Named("teamId") int teamId, @Named("pokemonId") int pokemonId,
                                       @Named("nickname") String nickname, @Named("level") int level,
-                                      @Named("moveOne") String moveOne, @Named("moveTwo") String moveTwo,
-                                      @Named("moveThree") String moveThree, @Named("moveFour") String moveFour) {
+                                      @Named("moveOne") int moveOne, @Named("moveTwo") int moveTwo,
+                                      @Named("moveThree") int moveThree, @Named("moveFour") int moveFour) {
 
         instantiateDriver();
-        String str = "";
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement preparedStatement = connection.prepareStatement(NEW_POKEMON_TEAM);
@@ -432,17 +431,18 @@ public class MyEndpoint {
             preparedStatement.setInt(2, pokemonId);
             preparedStatement.setString(3, nickname);
             preparedStatement.setInt(4, level);
-            preparedStatement.setString(5, moveOne);
-            preparedStatement.setString(6, moveTwo);
-            preparedStatement.setString(7, moveThree);
-            preparedStatement.setString(8, moveFour);
+            preparedStatement.setInt(5, moveOne);
+            preparedStatement.setInt(6, moveTwo);
+            preparedStatement.setInt(7, moveThree);
+            preparedStatement.setInt(8, moveFour);
             preparedStatement.executeUpdate();
             connection.close();
-        } catch (Exception e) {
-            str = e.getMessage();
+        }
+        catch (Exception e) {
+
         }
 
-        return new CheckResult(str, true);
+        return new CheckResult(QueryResult.NEW_POKEMON_ON_TEAM, true);
     }
 
     @ApiMethod(name = "updateTeam")
