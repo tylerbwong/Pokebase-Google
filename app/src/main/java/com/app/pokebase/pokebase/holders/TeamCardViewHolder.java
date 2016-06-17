@@ -2,6 +2,7 @@ package com.app.pokebase.pokebase.holders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,17 +27,23 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
    public ImageView mPokemonFour;
    public ImageView mPokemonFive;
    public ImageView mPokemonSix;
+   public int mTeamId;
 
    public List<ImageView> pokemonList;
 
    public TeamCardViewHolder(View itemView) {
       super(itemView);
       this.view = itemView;
+      this.mTeamId = 0;
 
       this.view.setOnClickListener(new View.OnClickListener() {
          @Override public void onClick(View v) {
             Context cardContext = v.getContext();
             Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
+            Bundle extras = new Bundle();
+            extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
+            extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
+            editorIntent.putExtras(extras);
             v.getContext().startActivity(editorIntent);
          }
       });
@@ -58,5 +65,9 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
       pokemonList.add(mPokemonFour);
       pokemonList.add(mPokemonFive);
       pokemonList.add(mPokemonSix);
+   }
+
+   public void setTeamId(int teamId) {
+      this.mTeamId = teamId;
    }
 }

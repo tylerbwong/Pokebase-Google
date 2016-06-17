@@ -32,7 +32,8 @@ import java.util.ArrayList;
  * @author Tyler Wong
  */
 public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
-
+   public static final String TEAM_ID_KEY = "team_id_key";
+   public static final String UPDATE_KEY = "update_key";
    private Toolbar mToolbar;
    private RelativeLayout mLayout;
    private RecyclerView mPokemonList;
@@ -59,6 +60,19 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
       getSupportActionBar().setTitle(R.string.new_team);
+
+      Intent intent = getIntent();
+      Bundle extras = intent.getExtras();
+      int teamId = extras.getInt(TEAM_ID_KEY);
+      boolean update = extras.getBoolean(UPDATE_KEY, false);
+
+      //if you are updating an existing team
+      if (update) {
+         String[] teamPokemon = new String[2];
+         teamPokemon[0] = QueryTask.TEAM_BY_ID;
+         teamPokemon[1] = String.valueOf(teamId);
+         new QueryTask().execute(new Pair<Context, String[]>(this, teamPokemon));
+      }
 
       mPokemon = new ArrayList<>();
 
