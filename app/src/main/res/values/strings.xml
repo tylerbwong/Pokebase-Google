@@ -54,7 +54,8 @@
     <string name="description">Description</string>
     <string name="add_pokemon">Add Pokémon</string>
     <string name="no_pokemon">No Pokémon Added Yet!</string>
-    <string name="lvl">Lvl. 100</string>
+    <string name="lvl">Lvl.</string>
+    <string name="hundred">100</string>
     <string name="exit">Exit</string>
     <string name="login">Login</string>
     <string name="create_user">Create User</string>

@@ -31,7 +31,7 @@
             android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/level"
+            android:id="@+id/level_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
@@ -39,6 +39,18 @@
             android:layout_marginTop="3dp"
             android:layout_toEndOf="@id/pokemon"
             android:text="@string/lvl"
+            android:textSize="12sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@id/level_label"
+            android:text="@string/hundred"
             android:textSize="12sp"
             android:textStyle="italic"/>
 
