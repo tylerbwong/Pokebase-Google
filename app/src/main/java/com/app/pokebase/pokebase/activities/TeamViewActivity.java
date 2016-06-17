@@ -21,7 +21,9 @@ import android.widget.Toast;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.PokemonTeamMemberAdapter;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
+import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
+import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 /**
  * @author Tyler Wong
  */
-public class TeamViewActivity extends AppCompatActivity {
+public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
 
    private Toolbar mToolbar;
    private RelativeLayout mLayout;
@@ -60,16 +62,9 @@ public class TeamViewActivity extends AppCompatActivity {
 
       mPokemon = new ArrayList<>();
 
-      mPokemon.add(new PokemonTeamMember(0));
-      mPokemon.add(new PokemonTeamMember(0));
-      mPokemon.add(new PokemonTeamMember(0));
-      mPokemon.add(new PokemonTeamMember(0));
-
       LinearLayoutManager llm = new LinearLayoutManager(this);
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mPokemonList.setLayoutManager(llm);
-      mPokemonAdapter = new PokemonTeamMemberAdapter(mPokemon);
-      mPokemonList.setAdapter(mPokemonAdapter);
 
       if (mPokemon.isEmpty()) {
          mPokemonList.setVisibility(View.GONE);
@@ -139,5 +134,20 @@ public class TeamViewActivity extends AppCompatActivity {
    @Override
    public void onBackPressed() {
       showBackDialog();
+   }
+
+   @Override
+   public void onApiCallback(QueryResult result) {
+      mPokemon = new ArrayList<>();
+      mPokemonAdapter = new PokemonTeamMemberAdapter(mPokemon);
+      mPokemonList.setAdapter(mPokemonAdapter);
+
+      if (mPokemon.isEmpty()) {
+         mPokemonList.setVisibility(View.GONE);
+         mEmptyView.setVisibility(View.VISIBLE);
+      } else {
+         mPokemonList.setVisibility(View.VISIBLE);
+         mEmptyView.setVisibility(View.GONE);
+      }
    }
 }

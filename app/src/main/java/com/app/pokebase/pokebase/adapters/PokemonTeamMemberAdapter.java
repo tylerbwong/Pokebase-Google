@@ -1,5 +1,6 @@
 package com.app.pokebase.pokebase.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,9 @@ import android.view.ViewGroup;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.holders.PokemonTeamMemberViewHolder;
-import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tyler Wong
@@ -18,8 +19,10 @@ import java.util.ArrayList;
 public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMemberViewHolder> {
 
    private ArrayList<PokemonTeamMember> mPokemon;
+   private Context mContext;
 
-   public PokemonTeamMemberAdapter(ArrayList<PokemonTeamMember> pokemon) {
+   public PokemonTeamMemberAdapter(Context context, ArrayList<PokemonTeamMember> pokemon) {
+      this.mContext = context;
       this.mPokemon = pokemon;
    }
 
@@ -40,17 +43,20 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
    @Override
    public void onBindViewHolder(final PokemonTeamMemberViewHolder holder, int position) {
       PokemonTeamMember curPokemon = mPokemon.get(position);
-//      holder.mTitleLabel.setText(curPokemon.getName());
-      //holder.mPokemonOne.setImageDrawable(c);
+      holder.mName.setText(curPokemon.mNickname);
+      holder.mLevel.setText(curPokemon.mLevel);
+      int imageResourceId = mContext.getResources().getIdentifier("sprites_" + curPokemon.mPokemonId, "drawable", mContext.getPackageName());
+      holder.mPokemon.setImageResource(imageResourceId);
+      List<String> moves = curPokemon.mMoves;
+      String moveList = "";
+      for (String move : moves) {
+         moveList += move + "\n";
+      }
+      holder.mMoveset.setText(moveList);
    }
 
    @Override
    public int getItemCount() {
       return mPokemon.size();
-   }
-
-   @Override
-   public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-      super.onAttachedToRecyclerView(recyclerView);
    }
 }

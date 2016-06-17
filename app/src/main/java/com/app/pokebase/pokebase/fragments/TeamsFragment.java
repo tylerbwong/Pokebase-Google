@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.TeamViewActivity;
 import com.app.pokebase.pokebase.adapters.TeamAdapter;
-import com.app.pokebase.pokebase.components.PokemonTeamMember;
+import com.app.pokebase.pokebase.components.PokemonTeamItem;
 import com.app.pokebase.pokebase.components.Team;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
@@ -128,13 +128,13 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          mTeams = new ArrayList<>();
          if (teamIds != null) {
             for (int i = 0; i < teamIds.size(); i++) {
-               List<PokemonTeamMember> members = new ArrayList<>();
+               List<PokemonTeamItem> members = new ArrayList<>();
                if (pokemonIds != null && pokemonIds.size()  > 0) {
                   List<Integer> teamPokemon = pokemonIds.remove(0);
 
                   for (Integer pokemon : teamPokemon) {
                      if (pokemon != -1) {
-                        members.add(new PokemonTeamMember(pokemon));
+                        members.add(new PokemonTeamItem(pokemon));
                      }
                   }
                }
