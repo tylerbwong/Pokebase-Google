@@ -139,7 +139,7 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
    @Override
    public void onApiCallback(QueryResult result) {
       mPokemon = new ArrayList<>();
-      mPokemonAdapter = new PokemonTeamMemberAdapter(mPokemon);
+      mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon);
       mPokemonList.setAdapter(mPokemonAdapter);
 
       if (mPokemon.isEmpty()) {

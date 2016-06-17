@@ -10,7 +10,6 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.holders.PokemonTeamMemberViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,15 +17,15 @@ import java.util.List;
  */
 public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMemberViewHolder> {
 
-   private ArrayList<PokemonTeamMember> mPokemon;
+   private List<PokemonTeamMember> mPokemon;
    private Context mContext;
 
-   public PokemonTeamMemberAdapter(Context context, ArrayList<PokemonTeamMember> pokemon) {
+   public PokemonTeamMemberAdapter(Context context, List<PokemonTeamMember> pokemon) {
       this.mContext = context;
       this.mPokemon = pokemon;
    }
 
-   public ArrayList<PokemonTeamMember> getPokemon() {
+   public List<PokemonTeamMember> getPokemon() {
       return mPokemon;
    }
 
