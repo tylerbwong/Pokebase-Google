@@ -534,6 +534,12 @@ public class MyEndpoint {
                 }
             }
 
+            for (int i = 0; i < teamIds.size(); i++) {
+                if (pokemon.get(i).isEmpty()) {
+                    pokemon.get(i).add(-1);
+                }
+            }
+
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
