@@ -173,31 +173,33 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback {
 
    @Override
    public void onApiCallback(QueryResult result) {
-      if (result.getType().equals(QueryTask.TEAM_BY_ID)) {
-         List<Integer> memberIds = result.getMoreMoreIntInfo();
-         List<Integer> pokemonIds = result.getIntInfo();
-         List<String> nicknames = result.getStringInfo();
-         List<Integer> levels = result.getMoreIntInfo();
-         List<List<String>> moves = result.getListOfStringLists();
+      if (result != null) {
+         if (result.getType().equals(QueryTask.TEAM_BY_ID)) {
+            List<Integer> memberIds = result.getMoreMoreIntInfo();
+            List<Integer> pokemonIds = result.getIntInfo();
+            List<String> nicknames = result.getStringInfo();
+            List<Integer> levels = result.getMoreIntInfo();
+            List<List<String>> moves = result.getListOfStringLists();
 
-         mPokemon = new ArrayList<>();
-         if (pokemonIds != null) {
-            for (int index = 0; index < pokemonIds.size(); index++) {
-               mPokemon.add(new PokemonTeamMember(memberIds.get(index), pokemonIds.get(index), nicknames.get(index),
-                     levels.get(index), moves.get(index)));
+            mPokemon = new ArrayList<>();
+            if (pokemonIds != null) {
+               for (int index = 0; index < pokemonIds.size(); index++) {
+                  mPokemon.add(new PokemonTeamMember(memberIds.get(index), pokemonIds.get(index), nicknames.get(index),
+                        levels.get(index), moves.get(index)));
+               }
+               mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, mTeamId,
+                     mNameInput.getText().toString(), mDescriptionInput.getText().toString());
+               mPokemonList.setAdapter(mPokemonAdapter);
             }
-            mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, mTeamId,
-                  mNameInput.getText().toString(), mDescriptionInput.getText().toString());
-            mPokemonList.setAdapter(mPokemonAdapter);
-         }
 
-         if (mPokemon.isEmpty()) {
-            mPokemonList.setVisibility(View.GONE);
-            mEmptyView.setVisibility(View.VISIBLE);
-         }
-         else {
-            mPokemonList.setVisibility(View.VISIBLE);
-            mEmptyView.setVisibility(View.GONE);
+            if (mPokemon.isEmpty()) {
+               mPokemonList.setVisibility(View.GONE);
+               mEmptyView.setVisibility(View.VISIBLE);
+            }
+            else {
+               mPokemonList.setVisibility(View.VISIBLE);
+               mEmptyView.setVisibility(View.GONE);
+            }
          }
       }
    }

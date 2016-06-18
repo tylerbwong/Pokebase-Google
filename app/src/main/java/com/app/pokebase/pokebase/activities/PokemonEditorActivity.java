@@ -180,9 +180,13 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
             if (result.getType().equals(QueryTask.SELECTED_POKEMON)) {
                 List<String> moves = result.getMoreStringInfo();
                 mMoveSpinners[0].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
+                mMoveSpinners[0].setSelection(moves.indexOf(mMoveOne));
                 mMoveSpinners[1].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
+                mMoveSpinners[1].setSelection(moves.indexOf(mMoveTwo));
                 mMoveSpinners[2].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
+                mMoveSpinners[2].setSelection(moves.indexOf(mMoveThree));
                 mMoveSpinners[3].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
+                mMoveSpinners[3].setSelection(moves.indexOf(mMoveFour));
             }
         }
     }

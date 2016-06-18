@@ -568,6 +568,8 @@ public class MyEndpoint {
         List<Integer> levels = new ArrayList<>();
         List<List<String>> moves = new ArrayList<>();
 
+        ResultSet moveResultSet;
+        String newMove = "";
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement preparedStatement = connection.prepareStatement(POKEMON_BY_TEAM);
@@ -581,32 +583,56 @@ public class MyEndpoint {
 
                 List<String> moveSet = new ArrayList<>();
                 String move = resultSet.getString("moveOne");
-                if (move == null) {
-                    moveSet.add("");
+                if (move.equals("0")) {
+                    moveSet.add("None");
                 }
                 else {
-                    moveSet.add(move);
+                    preparedStatement = connection.prepareStatement(POKEMON_MOVES);
+                    preparedStatement.setInt(1, Integer.valueOf(move));
+                    moveResultSet = preparedStatement.executeQuery();
+                    while (moveResultSet.next()) {
+                        newMove = moveResultSet.getString("name");
+                    }
+                    moveSet.add(newMove);
                 }
                 move = resultSet.getString("moveTwo");
-                if (move == null) {
-                    moveSet.add("");
+                if (move.equals("0")) {
+                    moveSet.add("None");
                 }
                 else {
-                    moveSet.add(move);
+                    preparedStatement = connection.prepareStatement(POKEMON_MOVES);
+                    preparedStatement.setInt(1, Integer.valueOf(move));
+                    moveResultSet = preparedStatement.executeQuery();
+                    while (moveResultSet.next()) {
+                        newMove = moveResultSet.getString("name");
+                    }
+                    moveSet.add(newMove);
                 }
                 move = resultSet.getString("moveThree");
-                if (move == null) {
-                    moveSet.add("");
+                if (move.equals("0")) {
+                    moveSet.add("None");
                 }
                 else {
-                    moveSet.add(move);
+                    preparedStatement = connection.prepareStatement(POKEMON_MOVES);
+                    preparedStatement.setInt(1, Integer.valueOf(move));
+                    moveResultSet = preparedStatement.executeQuery();
+                    while (moveResultSet.next()) {
+                        newMove = moveResultSet.getString("name");
+                    }
+                    moveSet.add(newMove);
                 }
                 move = resultSet.getString("moveFour");
-                if (move == null) {
-                    moveSet.add("");
+                if (move.equals("0")) {
+                    moveSet.add("None");
                 }
                 else {
-                    moveSet.add(move);
+                    preparedStatement = connection.prepareStatement(POKEMON_MOVES);
+                    preparedStatement.setInt(1, Integer.valueOf(move));
+                    moveResultSet = preparedStatement.executeQuery();
+                    while (moveResultSet.next()) {
+                        newMove = moveResultSet.getString("name");
+                    }
+                    moveSet.add(newMove);
                 }
                 moves.add(moveSet);
             }

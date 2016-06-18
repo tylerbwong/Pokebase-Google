@@ -36,6 +36,7 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
     public static final String ALL_TEAMS = "all_teams";
     public static final String TEAM_BY_ID = "team_by_id";
     public static final String TEAM_NAMES = "team_names";
+    public static final String POKEMON_MOVES = "pokemon_moves";
 
     private static MyApi myApiService = null;
     private Context context;

@@ -10,7 +10,7 @@ public class PokemonTeamMember {
     public final int mPokemonId;
     public final int mLevel;
     public final String mNickname;
-    public final List<String> mMoves;
+    public List<String> mMoves;
 
     public PokemonTeamMember(int memberId, int id, String nickname, int level, List<String> moves) {
         this.mMemberId = memberId;

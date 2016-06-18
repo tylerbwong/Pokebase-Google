@@ -13,6 +13,7 @@ public abstract class QueryResult {
     public static final String SELECTED_POKEMON = "selected";
     public static final String SELECTED_POKEMON_EVOLUTIONS = "selected_evolutions";
     public static final String POKEMON_BY_NAME = "by_name";
+    public static final String POKEMON_MOVES = "pokemon_moves";
     public static final String CHECK_USERNAME = "check_username";
     public static final String NEW_USER = "new_user";
     public static final String LOGIN = "login";
