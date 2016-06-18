@@ -143,6 +143,13 @@ public class MyEndpoint {
     private final static String POKEMON_MOVES =
             "SELECT M.name FROM Moves M WHERE M.id = ?";
 
+    private final static String UPDATE_POKEMON =
+            "UPDATE TeamPokemon SET nickname = ?, level = ?, moveOne = ?, moveTwo = ?, " +
+                  "moveThree = ?, moveFour = ? WHERE id = ?";
+
+    private final static String QUERY_MOVE_ID =
+            "SELECT M.id FROM Moves M WHERE M.name = ?";
+
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {
         instantiateDriver();
@@ -643,24 +650,87 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "updateTeamPokemon")
-    public QueryResult updateTeamPokemon(@Named("userId") int userId, @Named("teamId") int teamId,
-                                         @Named("pokemonId") int pokemonId,
-                                         @Named("nickname") String nickname, @Named("level") int level,
-                                         @Named("moveOne") String moveOne, @Named("moveTwo") String moveTwo,
-                                         @Named("moveThree") String moveThree, @Named("moveFour") String moveFour) {
-        // UPDATE POKEMON ON TEAM
+    public QueryResult updateTeamPokemon(@Named("memberId") int memberId, @Named("nickname") String nickname,
+                                         @Named("level") int level, @Named("moveOne") String moveOne,
+                                         @Named("moveTwo") String moveTwo, @Named("moveThree") String moveThree,
+                                         @Named("moveFour") String moveFour) {
 
-        //UPDATE TeamPokemon TP
-        //JOIN UserTeams UT ON UT.teamId = UT.teamId
-        //JOIN Teams T ON T.id = UT.teamId
-        //JOIN Users U ON U.id = UT.userId
-        //SET TP.nickname = (nickname ?), TP.level = (level ?),
-        //TP.moveOne = (moveOne ?), TP.moveTwo = (moveTwo ?),
-        //TP.moveThree = (moveThree ?), TP.moveFour = (moveFour ?)
-        //WHERE U.id = userId
-        //AND T.id = teamId
-        //AND TP.pokemonId = pokemonId
+        int moveOneId = 0, moveTwoId = 0, moveThreeId = 0, moveFourId = 0;
+        ResultSet resultSet;
+        instantiateDriver();
 
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(QUERY_MOVE_ID);
+            preparedStatement.setString(1, moveOne);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                moveOneId = resultSet.getInt("id");
+            }
+            connection.close();
+        }
+        catch (Exception e) {
+
+        }
+
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(QUERY_MOVE_ID);
+            preparedStatement.setString(1, moveTwo);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                moveTwoId = resultSet.getInt("id");
+            }
+            connection.close();
+        }
+        catch (Exception e) {
+
+        }
+
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(QUERY_MOVE_ID);
+            preparedStatement.setString(1, moveThree);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                moveThreeId = resultSet.getInt("id");
+            }
+            connection.close();
+        }
+        catch (Exception e) {
+
+        }
+
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(QUERY_MOVE_ID);
+            preparedStatement.setString(1, moveFour);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                moveFourId = resultSet.getInt("id");
+            }
+            connection.close();
+        }
+        catch (Exception e) {
+
+        }
+
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_POKEMON);
+            preparedStatement.setString(1, nickname);
+            preparedStatement.setInt(2, level);
+            preparedStatement.setInt(3, moveOneId);
+            preparedStatement.setInt(4, moveTwoId);
+            preparedStatement.setInt(5, moveThreeId);
+            preparedStatement.setInt(6, moveFourId);
+            preparedStatement.setInt(7, memberId);
+            preparedStatement.executeUpdate();
+            connection.close();
+        }
+        catch (Exception e) {
+
+        }
 
         return new CheckResult(QueryResult.UPDATE_POKEMON, true);
     }

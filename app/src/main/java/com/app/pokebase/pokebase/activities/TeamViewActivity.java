@@ -181,12 +181,15 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback {
          List<List<String>> moves = result.getListOfStringLists();
 
          mPokemon = new ArrayList<>();
-         for (int index = 0; index < pokemonIds.size(); index++) {
-            mPokemon.add(new PokemonTeamMember(pokemonIds.get(index), nicknames.get(index),
-                  levels.get(index), moves.get(index)));
+         if (pokemonIds != null) {
+            for (int index = 0; index < pokemonIds.size(); index++) {
+               mPokemon.add(new PokemonTeamMember(memberIds.get(index), pokemonIds.get(index), nicknames.get(index),
+                     levels.get(index), moves.get(index)));
+            }
+            mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, mTeamId,
+                  mNameInput.getText().toString(), mDescriptionInput.getText().toString());
+            mPokemonList.setAdapter(mPokemonAdapter);
          }
-         mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, memberIds);
-         mPokemonList.setAdapter(mPokemonAdapter);
 
          if (mPokemon.isEmpty()) {
             mPokemonList.setVisibility(View.GONE);

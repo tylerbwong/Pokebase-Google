@@ -19,12 +19,17 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
 
    private List<PokemonTeamMember> mPokemon;
    private Context mContext;
-   private List<Integer> mMemberIds;
+   private String mName;
+   private String mDescription;
+   private int mTeamId;
 
-   public PokemonTeamMemberAdapter(Context context, List<PokemonTeamMember> pokemon, List<Integer> memberIds) {
+   public PokemonTeamMemberAdapter(Context context, List<PokemonTeamMember> pokemon, int teamId,
+                                   String name, String description) {
       this.mContext = context;
       this.mPokemon = pokemon;
-      this.mMemberIds = memberIds;
+      this.mName = name;
+      this.mDescription = description;
+      this.mTeamId = teamId;
    }
 
    public List<PokemonTeamMember> getPokemon() {
@@ -55,6 +60,9 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
       }
       holder.mMoveset.setText(moveList);
       holder.setPokemon(curPokemon);
+      holder.setTeamId(mTeamId);
+      holder.setTitle(mName);
+      holder.setDescription(mDescription);
    }
 
    @Override

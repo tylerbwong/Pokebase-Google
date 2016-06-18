@@ -21,6 +21,9 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
    public TextView mLevel;
    public TextView mMoveset;
    private PokemonTeamMember mPokemonData;
+   private String mTitle;
+   private String mDescription;
+   private int mTeamId;
 
    public PokemonTeamMemberViewHolder(View itemView) {
       super(itemView);
@@ -31,6 +34,10 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
             Context cardContext = v.getContext();
             Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
             editorIntent.putExtra("pokemonId", mPokemonData.mPokemonId);
+            editorIntent.putExtra("teamId", mTeamId);
+            editorIntent.putExtra("title", mTitle);
+            editorIntent.putExtra("description", mDescription);
+            editorIntent.putExtra("memberId", mPokemonData.mMemberId);
             editorIntent.putExtra("level", mPokemonData.mLevel);
             editorIntent.putExtra("nickname", mPokemonData.mNickname);
             editorIntent.putExtra("moveOne", mPokemonData.mMoves.get(0));
@@ -50,5 +57,17 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
 
    public void setPokemon(PokemonTeamMember member) {
       this.mPokemonData = member;
+   }
+
+   public void setTitle(String name) {
+      this.mTitle = name;
+   }
+
+   public void setDescription(String description) {
+      this.mDescription = description;
+   }
+
+   public void setTeamId(int teamId) {
+      this.mTeamId = teamId;
    }
 }
