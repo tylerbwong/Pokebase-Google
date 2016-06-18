@@ -19,10 +19,12 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
 
    private List<PokemonTeamMember> mPokemon;
    private Context mContext;
+   private List<Integer> mMemberIds;
 
-   public PokemonTeamMemberAdapter(Context context, List<PokemonTeamMember> pokemon) {
+   public PokemonTeamMemberAdapter(Context context, List<PokemonTeamMember> pokemon, List<Integer> memberIds) {
       this.mContext = context;
       this.mPokemon = pokemon;
+      this.mMemberIds = memberIds;
    }
 
    public List<PokemonTeamMember> getPokemon() {
@@ -43,7 +45,7 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
    public void onBindViewHolder(final PokemonTeamMemberViewHolder holder, int position) {
       PokemonTeamMember curPokemon = mPokemon.get(position);
       holder.mName.setText(curPokemon.mNickname);
-      holder.mLevel.setText(curPokemon.mLevel);
+      holder.mLevel.setText(String.valueOf(curPokemon.mLevel));
       int imageResourceId = mContext.getResources().getIdentifier("sprites_" + curPokemon.mPokemonId, "drawable", mContext.getPackageName());
       holder.mPokemon.setImageResource(imageResourceId);
       List<String> moves = curPokemon.mMoves;
@@ -52,6 +54,7 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
          moveList += move + "\n";
       }
       holder.mMoveset.setText(moveList);
+      holder.setPokemon(curPokemon);
    }
 
    @Override

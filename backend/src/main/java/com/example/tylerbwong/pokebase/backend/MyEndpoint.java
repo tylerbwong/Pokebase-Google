@@ -105,7 +105,7 @@ public class MyEndpoint {
                     "ORDER BY T.id";
     private final static String POKEMON_BY_TEAM =
             "SELECT P.id, P.pokemonId, P.nickname, P.level, P.moveOne, P.moveTwo, P.moveThree, P.moveFour " +
-                    "FROM TeamPokemon P" +
+                    "FROM TeamPokemon P " +
                     "WHERE P.teamId = ?";
 
     private final static String USER_ID =
@@ -139,6 +139,9 @@ public class MyEndpoint {
 
     private static final String NEW_POKEMON_TEAM =
             "INSERT INTO TeamPokemon Values (0, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private final static String POKEMON_MOVES =
+            "SELECT M.name FROM Moves M WHERE M.id = ?";
 
     @ApiMethod(name = "queryAllTypesRegions")
     public QueryResult queryAllTypesRegions() {

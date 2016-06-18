@@ -19,11 +19,13 @@ import java.util.List;
 public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
    private List<Team> mTeams;
+   private List<Integer> mTeamIds;
    private Context mContext;
 
-   public TeamAdapter(Context context, ArrayList<Team> teams) {
+   public TeamAdapter(Context context, ArrayList<Team> teams, List<Integer> teamIds) {
       this.mContext = context;
       this.mTeams = teams;
+      this.mTeamIds = teamIds;
    }
 
    public List<Team> getTeams() {
@@ -52,6 +54,8 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
                  .getIdentifier("icon_" + curTeam.mTeam.get(i).mPokemonId,
                          "drawable", mContext.getPackageName()));
       }
+
+      holder.setTeamId(mTeamIds.get(position));
    }
 
    @Override

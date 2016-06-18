@@ -75,7 +75,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       LinearLayoutManager llm = new LinearLayoutManager(getContext());
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mTeamList.setLayoutManager(llm);
-      mTeamAdapter = new TeamAdapter(getContext(), mTeams);
+      mTeamAdapter = new TeamAdapter(getContext(), mTeams, null);
       mTeamList.setAdapter(mTeamAdapter);
 
       if (mTeams.isEmpty()) {
@@ -143,7 +143,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
             }
          }
 
-         mTeamAdapter = new TeamAdapter(getContext(), mTeams);
+         mTeamAdapter = new TeamAdapter(getContext(), mTeams, teamIds);
          mTeamList.setAdapter(mTeamAdapter);
 
          if (mTeams.isEmpty()) {

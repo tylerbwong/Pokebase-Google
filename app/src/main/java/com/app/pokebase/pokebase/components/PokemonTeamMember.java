@@ -11,10 +11,14 @@ public class PokemonTeamMember {
     public final String mNickname;
     public final List<String> mMoves;
 
-    public PokemonTeamMember(int id, int level, String nickname, List<String> moves) {
+    public PokemonTeamMember(int id, String nickname, int level, List<String> moves) {
         this.mPokemonId = id;
         this.mLevel = level;
         this.mNickname = nickname;
         this.mMoves = moves;
+    }
+
+    public int getId() {
+        return mPokemonId;
     }
 }

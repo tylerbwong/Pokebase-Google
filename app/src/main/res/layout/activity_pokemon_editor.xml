@@ -100,6 +100,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-80dp"
         android:background="@drawable/circle_shape"
-        android:scaleType="center"
-        android:src="@drawable/sprites_43" />
+        android:scaleType="center"/>
 </RelativeLayout>

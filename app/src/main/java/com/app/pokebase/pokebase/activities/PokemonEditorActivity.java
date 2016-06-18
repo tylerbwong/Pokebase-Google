@@ -31,6 +31,8 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
     private TextInputEditText mNickNameView;
     private Spinner mLevelSpinner;
     private Spinner[] mMoveSpinners;
+    private int mPokemonId;
+    private String mNickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,15 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Oddish");
         mProfileImg = (ImageView) findViewById(R.id.profile_image);
         mProfileImg.setClipToOutline(true);
         mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
+        Intent intent = getIntent();
+        mPokemonId = intent.getIntExtra("pokemonId", 0);
+        mNickname = intent.getStringExtra("nickname");
+        actionBar.setTitle(mNickname);
+        int imageResourceId = getResources().getIdentifier("sprites_" + mPokemonId, "drawable", getPackageName());
+        mProfileImg.setImageResource(imageResourceId);
         mNickNameView = (TextInputEditText) findViewById(R.id.nickname_input);
         mLevelSpinner = (Spinner) findViewById(R.id.level_spinner);
         mMoveSpinners = new Spinner[NUM_SPINNERS];
@@ -54,19 +61,9 @@ public class PokemonEditorActivity extends AppCompatActivity implements ApiCallb
 
 
         String[] moves = new String[10];
-        moves[0] = "Solar Beam";
-        moves[1] = "Spore";
-        moves[2] = "Poison Powder";
-        moves[3] = "Tackle";
-        moves[4] = "Growl";
-        moves[5] = "Synthesis";
-        moves[6] = "Absorb";
-        moves[7] = "Hyper Beam";
-        moves[8] = "Dragonbreath";
-        moves[9] = "Cut";
 
         String[] levels = new String[MAX_LEVEL];
-        for (int lvl = MIN_LEVEL; lvl < levels.length; lvl++) {
+        for (int lvl = MIN_LEVEL; lvl <= levels.length; lvl++) {
             levels[lvl - MIN_LEVEL] = String.valueOf(lvl);
         }
 

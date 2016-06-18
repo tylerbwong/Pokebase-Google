@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.PokemonEditorActivity;
+import com.app.pokebase.pokebase.components.PokemonTeamMember;
 
 /**
  * @author Tyler Wong
@@ -19,6 +20,7 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
    public TextView mName;
    public TextView mLevel;
    public TextView mMoveset;
+   private PokemonTeamMember mPokemonData;
 
    public PokemonTeamMemberViewHolder(View itemView) {
       super(itemView);
@@ -28,6 +30,14 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
          @Override public void onClick(View v) {
             Context cardContext = v.getContext();
             Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
+            editorIntent.putExtra("pokemonId", mPokemonData.mPokemonId);
+            editorIntent.putExtra("level", mPokemonData.mLevel);
+            editorIntent.putExtra("nickname", mPokemonData.mNickname);
+            editorIntent.putExtra("moveOne", mPokemonData.mMoves.get(0));
+            editorIntent.putExtra("moveTwo", mPokemonData.mMoves.get(1));
+            editorIntent.putExtra("moveThree", mPokemonData.mMoves.get(2));
+            editorIntent.putExtra("moveFour", mPokemonData.mMoves.get(3));
+
             v.getContext().startActivity(editorIntent);
          }
       });
@@ -36,5 +46,9 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
       mName = (TextView) itemView.findViewById(R.id.name);
       mLevel = (TextView) itemView.findViewById(R.id.level);
       mMoveset = (TextView) itemView.findViewById(R.id.moveset);
+   }
+
+   public void setPokemon(PokemonTeamMember member) {
+      this.mPokemonData = member;
    }
 }

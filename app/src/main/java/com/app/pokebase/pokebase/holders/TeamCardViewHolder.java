@@ -43,6 +43,8 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
             Bundle extras = new Bundle();
             extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
             extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
+            extras.putString("teamName", mTitleLabel.getText().toString());
+            extras.putString("description", mDescription.getText().toString());
             editorIntent.putExtras(extras);
             v.getContext().startActivity(editorIntent);
          }

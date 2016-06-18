@@ -55,7 +55,6 @@
     <string name="add_pokemon">Add Pokémon</string>
     <string name="no_pokemon">No Pokémon Added Yet!</string>
     <string name="lvl">Lvl.</string>
-    <string name="hundred">100</string>
     <string name="exit">Exit</string>
     <string name="login">Login</string>
     <string name="create_user">Create User</string>
@@ -66,5 +65,4 @@
     <string name="not_found">Username Not Found!</string>
     <string name="try_again">Please try again.</string>
     <string name="logout">Logout</string>
-    <string name="oddish">Oddish</string>
 </resources>

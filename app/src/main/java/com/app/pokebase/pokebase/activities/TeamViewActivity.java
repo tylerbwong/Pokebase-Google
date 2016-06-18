@@ -27,6 +27,7 @@ import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tyler Wong
@@ -65,6 +66,11 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       Bundle extras = intent.getExtras();
       int teamId = extras.getInt(TEAM_ID_KEY);
       boolean update = extras.getBoolean(UPDATE_KEY, false);
+      String teamTitle = extras.getString("teamName");
+      String description = extras.getString("description");
+
+      mNameInput.setText(teamTitle);
+      mDescriptionInput.setText(description);
 
       //if you are updating an existing team
       if (update) {
@@ -152,8 +158,18 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
 
    @Override
    public void onApiCallback(QueryResult result) {
+      List<Integer> memberIds = result.getMoreMoreIntInfo();
+      List<Integer> pokemonIds = result.getIntInfo();
+      List<String> nicknames = result.getStringInfo();
+      List<Integer> levels = result.getMoreIntInfo();
+      List<List<String>> moves = result.getListOfStringLists();
+
       mPokemon = new ArrayList<>();
-      mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon);
+      for (int index = 0; index < pokemonIds.size(); index++) {
+         mPokemon.add(new PokemonTeamMember(pokemonIds.get(index), nicknames.get(index),
+               levels.get(index), moves.get(index)));
+      }
+      mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, memberIds);
       mPokemonList.setAdapter(mPokemonAdapter);
 
       if (mPokemon.isEmpty()) {
