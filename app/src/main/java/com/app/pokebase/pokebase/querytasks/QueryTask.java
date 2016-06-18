@@ -82,6 +82,7 @@ public class QueryTask extends AsyncTask<Pair<Context, String[]>, Void, QueryRes
                           Integer.valueOf(queryList.get(4)), Integer.valueOf(queryList.get(5)), Integer.valueOf(queryList.get(6)),
                           Integer.valueOf(queryList.get(7)), Integer.valueOf(queryList.get(8))).execute();
                 case UPDATE_TEAM:
+                    return myApiService.updateTeam(Integer.valueOf(queryList.get(1)), queryList.get(2), queryList.get(3)).execute();
                 case UPDATE_POKEMON:
                 case DELETE_POKEMON:
                 case DELETE_TEAM:

@@ -115,7 +115,7 @@ public class MyEndpoint {
             "INSERT INTO Teams Values (0, ?, ?)";
 
     private final static String UPDATE_TEAM =
-            "UPDATE Teams SET name = ?, SET description = ? WHERE id = ?";
+            "UPDATE Teams SET name = ?, description = ? WHERE id = ?";
 
     private static final String TEAM_NAMES_BY_USER = "SELECT T.id, T.name FROM Teams T " +
             "JOIN UserTeams E ON E.teamId = T.id " +

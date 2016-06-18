@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * @author Tyler Wong
  */
-public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
+public class TeamViewActivity extends AppCompatActivity implements ApiCallback {
    public static final String TEAM_ID_KEY = "team_id_key";
    public static final String UPDATE_KEY = "update_key";
    private Toolbar mToolbar;
@@ -46,6 +46,7 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
    private ArrayList<PokemonTeamMember> mPokemon;
 
    private boolean mUpdateKey;
+   private int mTeamId;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
 
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
-      int teamId = extras.getInt(TEAM_ID_KEY);
+      mTeamId = extras.getInt(TEAM_ID_KEY);
       mUpdateKey = extras.getBoolean(UPDATE_KEY, false);
       String teamTitle = extras.getString("teamName");
       String description = extras.getString("description");
@@ -78,7 +79,7 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       if (mUpdateKey) {
          String[] teamPokemon = new String[2];
          teamPokemon[0] = QueryTask.TEAM_BY_ID;
-         teamPokemon[1] = String.valueOf(teamId);
+         teamPokemon[1] = String.valueOf(mTeamId);
          new QueryTask().execute(new Pair<Context, String[]>(this, teamPokemon));
       }
 
@@ -91,7 +92,8 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       if (mPokemon.isEmpty()) {
          mPokemonList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
-      } else {
+      }
+      else {
          mPokemonList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
       }
@@ -120,9 +122,10 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
    }
 
    private void addTeam() {
+      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+      String[] newTeam;
       if (!mUpdateKey) {
-         SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-         String[] newTeam = new String[4];
+         newTeam = new String[4];
          newTeam[0] = QueryTask.NEW_TEAM;
          newTeam[1] = pref.getString("username", "");
          newTeam[2] = mNameInput.getText().toString();
@@ -133,7 +136,13 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
                Toast.LENGTH_LONG).show();
       }
       else {
-         // UPDATE title and description
+         newTeam = new String[4];
+         newTeam[0] = QueryTask.UPDATE_TEAM;
+         newTeam[1] = String.valueOf(mTeamId);
+         newTeam[2] = mNameInput.getText().toString();
+         newTeam[3] = mDescriptionInput.getText().toString();
+         new QueryTask().execute(new Pair<Context, String[]>(this, newTeam));
+         Toast.makeText(this, "Updated team!", Toast.LENGTH_LONG).show();
       }
       backToMain();
    }
@@ -164,28 +173,29 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
 
    @Override
    public void onApiCallback(QueryResult result) {
-      List<Integer> memberIds = result.getMoreMoreIntInfo();
-      List<Integer> pokemonIds = result.getIntInfo();
-      List<String> nicknames = result.getStringInfo();
-      List<Integer> levels = result.getMoreIntInfo();
-      List<List<String>> moves = result.getListOfStringLists();
+      if (result.getType().equals(QueryTask.TEAM_BY_ID)) {
+         List<Integer> memberIds = result.getMoreMoreIntInfo();
+         List<Integer> pokemonIds = result.getIntInfo();
+         List<String> nicknames = result.getStringInfo();
+         List<Integer> levels = result.getMoreIntInfo();
+         List<List<String>> moves = result.getListOfStringLists();
 
-      mPokemon = new ArrayList<>();
-      if (pokemonIds != null) {
+         mPokemon = new ArrayList<>();
          for (int index = 0; index < pokemonIds.size(); index++) {
             mPokemon.add(new PokemonTeamMember(pokemonIds.get(index), nicknames.get(index),
                   levels.get(index), moves.get(index)));
          }
          mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, memberIds);
          mPokemonList.setAdapter(mPokemonAdapter);
-      }
 
-      if (mPokemon.isEmpty()) {
-         mPokemonList.setVisibility(View.GONE);
-         mEmptyView.setVisibility(View.VISIBLE);
-      } else {
-         mPokemonList.setVisibility(View.VISIBLE);
-         mEmptyView.setVisibility(View.GONE);
+         if (mPokemon.isEmpty()) {
+            mPokemonList.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+         }
+         else {
+            mPokemonList.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
+         }
       }
    }
 }
