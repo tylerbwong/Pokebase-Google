@@ -98,6 +98,10 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
    @Override
    public void onFabAnimationEnd() {
       Intent intent = new Intent(getContext(), TeamViewActivity.class);
+      Bundle extras = new Bundle();
+      extras.putInt(TeamViewActivity.TEAM_ID_KEY, 0);
+      extras.putBoolean(TeamViewActivity.UPDATE_KEY, false);
+      intent.putExtras(extras);
       startActivityForResult(intent, REQUEST_CODE);
    }
 

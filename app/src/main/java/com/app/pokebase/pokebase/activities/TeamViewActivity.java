@@ -45,6 +45,8 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
    private PokemonTeamMemberAdapter mPokemonAdapter;
    private ArrayList<PokemonTeamMember> mPokemon;
 
+   private boolean mUpdateKey;
+
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -65,7 +67,7 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
       int teamId = extras.getInt(TEAM_ID_KEY);
-      boolean update = extras.getBoolean(UPDATE_KEY, false);
+      mUpdateKey = extras.getBoolean(UPDATE_KEY, false);
       String teamTitle = extras.getString("teamName");
       String description = extras.getString("description");
 
@@ -73,7 +75,7 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       mDescriptionInput.setText(description);
 
       //if you are updating an existing team
-      if (update) {
+      if (mUpdateKey) {
          String[] teamPokemon = new String[2];
          teamPokemon[0] = QueryTask.TEAM_BY_ID;
          teamPokemon[1] = String.valueOf(teamId);
@@ -118,17 +120,21 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
    }
 
    private void addTeam() {
-      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      String[] newTeam = new String[4];
-      newTeam[0] = QueryTask.NEW_TEAM;
-      newTeam[1] = pref.getString("username", "");
-      newTeam[2] = mNameInput.getText().toString();
-      newTeam[3] = mDescriptionInput.getText().toString();
-      new QueryTask().execute(new Pair<Context, String[]>(this, newTeam));
+      if (!mUpdateKey) {
+         SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+         String[] newTeam = new String[4];
+         newTeam[0] = QueryTask.NEW_TEAM;
+         newTeam[1] = pref.getString("username", "");
+         newTeam[2] = mNameInput.getText().toString();
+         newTeam[3] = mDescriptionInput.getText().toString();
+         new QueryTask().execute(new Pair<Context, String[]>(this, newTeam));
 
-      Toast.makeText(this, "Added new team " + mNameInput.getText().toString() + "!",
-            Toast.LENGTH_LONG).show();
-
+         Toast.makeText(this, "Added new team " + mNameInput.getText().toString() + "!",
+               Toast.LENGTH_LONG).show();
+      }
+      else {
+         // UPDATE title and description
+      }
       backToMain();
    }
 
@@ -165,12 +171,14 @@ public class TeamViewActivity extends AppCompatActivity implements ApiCallback{
       List<List<String>> moves = result.getListOfStringLists();
 
       mPokemon = new ArrayList<>();
-      for (int index = 0; index < pokemonIds.size(); index++) {
-         mPokemon.add(new PokemonTeamMember(pokemonIds.get(index), nicknames.get(index),
-               levels.get(index), moves.get(index)));
+      if (pokemonIds != null) {
+         for (int index = 0; index < pokemonIds.size(); index++) {
+            mPokemon.add(new PokemonTeamMember(pokemonIds.get(index), nicknames.get(index),
+                  levels.get(index), moves.get(index)));
+         }
+         mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, memberIds);
+         mPokemonList.setAdapter(mPokemonAdapter);
       }
-      mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, memberIds);
-      mPokemonList.setAdapter(mPokemonAdapter);
 
       if (mPokemon.isEmpty()) {
          mPokemonList.setVisibility(View.GONE);
