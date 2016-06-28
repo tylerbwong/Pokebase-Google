@@ -18,12 +18,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.app.pokebase.pokebase.R;
+import com.app.pokebase.pokebase.activities.MainActivity;
 import com.app.pokebase.pokebase.activities.TeamViewActivity;
 import com.app.pokebase.pokebase.adapters.TeamAdapter;
 import com.app.pokebase.pokebase.components.PokemonTeamItem;
 import com.app.pokebase.pokebase.components.Team;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
 import com.app.pokebase.pokebase.querytasks.QueryTask;
+import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
+import com.bignerdranch.android.multiselector.MultiSelector;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.github.fabtransitionactivity.SheetLayout;
 
@@ -42,6 +45,8 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
 
    private TeamAdapter mTeamAdapter;
    private ArrayList<Team> mTeams;
+   private MultiSelector mMultiSelector;
+   private ModalMultiSelectorCallback mActionModeCallback;
 
    private final static int REQUEST_CODE = 1;
 
@@ -65,17 +70,20 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       mSheetLayout.setFab(mFab);
       mSheetLayout.setFabAnimationEndListener(this);
 
-      ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+      final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
          actionBar.setTitle(R.string.teams);
       }
+
+      mMultiSelector = ((MainActivity) getActivity()).getMultiSelector();
+      mActionModeCallback = ((MainActivity) getActivity()).getActionModeCallback();
 
       mTeams = new ArrayList<>();
 
       LinearLayoutManager llm = new LinearLayoutManager(getContext());
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mTeamList.setLayoutManager(llm);
-      mTeamAdapter = new TeamAdapter(getContext(), mTeams, null);
+      mTeamAdapter = new TeamAdapter(getContext(), mMultiSelector, mActionModeCallback, mTeams, null);
       mTeamList.setAdapter(mTeamAdapter);
 
       if (mTeams.isEmpty()) {
@@ -147,7 +155,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
             }
          }
 
-         mTeamAdapter = new TeamAdapter(getContext(), mTeams, teamIds);
+         mTeamAdapter = new TeamAdapter(getContext(), mMultiSelector, mActionModeCallback, mTeams, teamIds);
          mTeamList.setAdapter(mTeamAdapter);
 
          if (mTeams.isEmpty()) {
