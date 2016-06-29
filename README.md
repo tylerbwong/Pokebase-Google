@@ -11,3 +11,8 @@ Requires Android 5.1 (Lollipop) or higher. Simply install the APK.
 ## Usage
 
 Open the application on your phone and create an account.
+
+## Update
+
+As of **August 5, 2016**, Pokebase will not longer be supported on Google Cloud App Engine with Google Cloud SQL.
+Please see [Pokebase-SQLite](https://github.com/tylerbwong/Pokebase-SQLite) for a local, updated version of the application. Sorry for any inconveniences.
