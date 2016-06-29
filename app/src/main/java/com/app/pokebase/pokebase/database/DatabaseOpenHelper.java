@@ -2,15 +2,18 @@ package com.app.pokebase.pokebase.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Pair;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Pair;
 
 import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.components.PokemonProfile;
+import com.app.pokebase.pokebase.components.PokemonTeamItem;
+import com.app.pokebase.pokebase.components.PokemonTeamMember;
+import com.app.pokebase.pokebase.components.Team;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -103,10 +106,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                "FROM Teams T " +
                "ORDER BY T.id";
    private final static String ALL_TEAM_POKEMON =
-         "SELECT T.id, K.pokemonId " +
-               "FROM Teams T " +
-               "JOIN TeamPokemon K ON K.teamId = T.id " +
-               "ORDER BY T.id";
+         "SELECT K.pokemonId " +
+               "FROM TeamPokemon T " +
+               "WHERE T.teamId = ?";
    private final static String POKEMON_BY_TEAM =
          "SELECT P.id, P.pokemonId, P.nickname, P.level, P.moveOne, P.moveTwo, P.moveThree, P.moveFour " +
                "FROM TeamPokemon P " +
@@ -118,12 +120,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
    private final static String TEAM_NAMES = "SELECT T._id, T.name FROM Teams T";
    private final static String MAX_TEAM_ID =
          "SELECT MAX(T.id) AS maxId FROM Teams T";
-   private final static String NEW_USER_TEAM =
-         "INSERT INTO UserTeams VALUES (?, ?)";
    private final static String NEW_POKEMON_TEAM =
          "INSERT INTO TeamPokemon Values (0, ?, ?, ?, ?, ?, ?, ?, ?)";
    private final static String POKEMON_MOVES =
-         "SELECT M.name FROM Moves M WHERE M.id = ?";
+         "SELECT M.name FROM Moves M WHERE M.id = ? OR M.id = ? OR M.id = ? OR M.id = ?";
    private final static String UPDATE_POKEMON =
          "UPDATE TeamPokemon SET nickname = ?, level = ?, moveOne = ?, moveTwo = ?, " +
                "moveThree = ?, moveFour = ? WHERE id = ?";
@@ -412,8 +412,78 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
       return teamNames;
    }
 
-   // TODO queryAllTeams
-   // TODO queryTeamId
+   public List<PokemonTeamItem> queryTeamPokemonIds(int teamId) {
+      List<PokemonTeamItem> teamPokemon = new ArrayList<>();
+      Cursor cursor = mDatabase.rawQuery(ALL_TEAM_POKEMON, new String[] {String.valueOf(teamId)});
+      cursor.moveToFirst();
+
+      PokemonTeamItem tempPokemon;
+
+      while(!cursor.isAfterLast()) {
+         tempPokemon = new PokemonTeamItem(cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL)));
+         teamPokemon.add(tempPokemon);
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return teamPokemon;
+   }
+
+   public List<Team> queryAllTeams() {
+      List<Team> teams = new ArrayList<>();
+      Cursor cursor = mDatabase.rawQuery(ALL_TEAM_INFO, null);
+      cursor.moveToFirst();
+
+      Team tempTeam;
+      int teamId;
+
+      while(!cursor.isAfterLast()) {
+         teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
+         tempTeam = new Team(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)),
+               cursor.getString(cursor.getColumnIndex(DESCRIPTION_COL)),
+               queryTeamPokemonIds(teamId));
+         teams.add(tempTeam);
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return teams;
+   }
+
+   public List<String> queryPokemonMoves(int moveOne, int moveTwo, int moveThree, int moveFour) {
+      List<String> moves = new ArrayList<>();
+      Cursor cursor = mDatabase.rawQuery(POKEMON_MOVES, new String[] {String.valueOf(moveOne),
+            String.valueOf(moveTwo), String.valueOf(moveThree), String.valueOf(moveFour)});
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         moves.add(cursor.getString(cursor.getColumnIndex(NAME_COL)));
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return moves;
+   }
+
+   public List<PokemonTeamMember> queryPokemonTeamMembers(int teamId) {
+      List<PokemonTeamMember> pokemon = new ArrayList<>();
+      Cursor cursor = mDatabase.rawQuery(POKEMON_BY_TEAM, new String[] {String.valueOf(teamId)});
+      cursor.moveToFirst();
+
+      PokemonTeamMember tempPokemon;
+
+      while(!cursor.isAfterLast()) {
+         tempPokemon = new PokemonTeamMember(cursor.getInt(cursor.getColumnIndex(ROW_ID_COL)),
+               cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL)),
+               cursor.getString(cursor.getColumnIndex(NICKNAME_COL)),
+               cursor.getInt(cursor.getColumnIndex(LEVEL_COL)),
+               queryPokemonMoves(cursor.getInt(cursor.getColumnIndex(MOVE_ONE_COL)),
+                     cursor.getInt(cursor.getColumnIndex(MOVE_TWO_COL)),
+                     cursor.getInt(cursor.getColumnIndex(MOVE_THREE_COL)),
+                     cursor.getInt(cursor.getColumnIndex(MOVE_FOUR_COL))));
+         pokemon.add(tempPokemon);
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return pokemon;
+   }
    // TODO deleteTeam
    // TODO deleteTeamPokemon
    // TODO updateTeamPokemon

@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.components.Team;
 import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
-import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
-import com.bignerdranch.android.multiselector.MultiSelector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +21,11 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
    private List<Team> mTeams;
    private List<Integer> mTeamIds;
    private Context mContext;
-   private MultiSelector mMultiSelector;
-   private ModalMultiSelectorCallback mActionModeCallback;
 
-   public TeamAdapter(Context context, MultiSelector multiSelector,
-                      ModalMultiSelectorCallback actionModeCallback, ArrayList<Team> teams,
-                      List<Integer> teamIds) {
+   public TeamAdapter(Context context, ArrayList<Team> teams, List<Integer> teamIds) {
       this.mContext = context;
       this.mTeams = teams;
       this.mTeamIds = teamIds;
-      mMultiSelector = multiSelector;
-      mActionModeCallback = actionModeCallback;
    }
 
    public List<Team> getTeams() {
@@ -46,7 +38,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
       View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.team_card, parent, false);
 
-      TeamCardViewHolder viewHolder = new TeamCardViewHolder(view, mContext, mMultiSelector, mActionModeCallback);
+      TeamCardViewHolder viewHolder = new TeamCardViewHolder(view, mContext);
       return viewHolder;
    }
 

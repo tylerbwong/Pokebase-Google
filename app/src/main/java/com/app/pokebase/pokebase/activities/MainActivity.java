@@ -10,9 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,8 +21,6 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.fragments.PokebaseFragment;
 import com.app.pokebase.pokebase.fragments.TeamsFragment;
 import com.app.pokebase.pokebase.interfaces.ApiCallback;
-import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
-import com.bignerdranch.android.multiselector.MultiSelector;
 import com.example.tylerbwong.pokebase.backend.myApi.model.QueryResult;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -41,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
    private boolean mIsBoy;
    private Fragment mCurrentFragment;
    private FragmentTransaction fragmentTransaction;
-   private MultiSelector mMultiSelector;
-   private ModalMultiSelectorCallback mActionModeCallback;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -65,30 +59,13 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
 
       if (pref.getString("gender", "M").equals("M")) {
          mProfilePicture.setImageDrawable(getDrawable(R.drawable.boy));
-      } else {
+      }
+      else {
          mProfilePicture.setImageDrawable(getDrawable(R.drawable.girl));
       }
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
-      mMultiSelector = new MultiSelector();
-      mActionModeCallback =  new ModalMultiSelectorCallback(mMultiSelector) {
-
-         @Override
-         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-            super.onCreateActionMode(actionMode, menu);
-            getMenuInflater().inflate(R.menu.menu_trash, menu);
-            return true;
-         }
-
-         @Override
-         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-            if (menuItem.getItemId() == R.id.delete_action) {
-               System.out.println("Items deleted!");
-            }
-            return false;
-         }
-      };
 
       mNavigationView.getMenu().getItem(0).setChecked(true);
       TeamsFragment eventsFragment = new TeamsFragment();
@@ -148,14 +125,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
 
       mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
       actionBarDrawerToggle.syncState();
-   }
-
-   public MultiSelector getMultiSelector() {
-      return mMultiSelector;
-   }
-
-   public ModalMultiSelectorCallback getActionModeCallback() {
-      return mActionModeCallback;
    }
 
    private void showLogoutDialog() {
