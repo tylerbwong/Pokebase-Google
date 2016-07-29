@@ -4,9 +4,9 @@ This Android application uses Google Cloud App Engine with Google Cloud SQL to s
 information about all 721 Pokémon. You are able to view information about each Pokémon as well as
 create teams with Pokémon of various levels and movesets.
 
-## Installation
+## Requirements
 
-Requires Android 5.1 (Lollipop) or higher. Simply install the APK.
+Requires Android 5.0 (Lollipop) or higher.
 
 ## Usage
 
